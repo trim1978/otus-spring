@@ -1,0 +1,10 @@
+quiz:
+  file: quiz1
+  enough: 3
+#  locale: ru-RU
+spring:
+  shell:
+    interactive:
+      enabled: false
+  main:
+    allow-circular-references: true
