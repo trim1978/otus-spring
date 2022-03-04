@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true
+
+
+
+    properties:
+      hibernate:
+        id:
+          new_generator_mappings: false # это на случай GenerationType.AUTO
+
+logging:
+  level:
+    ROOT: ERROR

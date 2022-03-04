@@ -1,0 +1,35 @@
+debug: false #включил дебаг по умолчанию на весь проект
+spring:
+  datasource:
+    url: jdbc:h2:mem:library
+  sql:
+    init:
+      mode: always
+
+  shell:
+    interactive:
+      enabled: true
+
+  h2:
+#    console:
+#      path: /h2-console # стандартное обращение к консоли h2 указывать не нужно
+#      settings:
+#        web-allow-others: true
+    console.enabled: true
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  main:
+    allow-circular-references: true
+
+#    properties:
+#      hibernate:
+#        format_sql: true
+
+logging:
+  level:
+    ROOT: ERROR
