@@ -1,4 +1,4 @@
-package ru.otus.trim;
+package ru.otus.trim.dao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
