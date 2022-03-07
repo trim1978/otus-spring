@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:library
+    initialization-mode: always
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+
+  shell:
+    interactive:
+      enabled: true
+  main:
+    allow-circular-references: true
+
+    properties:
+      hibernate:
+        format_sql: false
+
+    show-sql: true
+
+
+logging:
+  level:
+    ROOT: ERROR
