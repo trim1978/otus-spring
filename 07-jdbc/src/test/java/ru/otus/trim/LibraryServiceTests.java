@@ -52,7 +52,7 @@ class LibraryServiceTests {
 	void genresTest() {
 		library.getGenres();
 		library.getGenre("");
-		verify(genreDao, times(2)).getAllGenres();
+		verify(genreDao, times(2)).findAll();
 	}
 
 	@DisplayName("read all books")
@@ -65,30 +65,30 @@ class LibraryServiceTests {
 	@DisplayName("update")
 	@Test
 	void updateTest() {
-		library.setBook(new Book(1, TITLE_1, new Author(0, AUTHOR_PUSHKIN), new Genre(1, "")));
-		verify(bookDao, times(1)).updateBookById(1, 1);
+		library.saveBook(new Book(1, TITLE_1, new Author(0, AUTHOR_PUSHKIN), new Genre(1, "")));
+		verify(bookDao, times(1)).updateById(1, 1);
 	}
 
 	@DisplayName("delete")
 	@Test
 	void deleteTest() {
-		when(bookDao.getBookById(1)).thenReturn(new Book(1, TITLE_1, new Author(1, AUTHOR_PUSHKIN), new Genre(1, "")));
-		when(bookDao.deleteBookById(1)).thenReturn(true);
+		when(bookDao.findById(1)).thenReturn(new Book(1, TITLE_1, new Author(1, AUTHOR_PUSHKIN), new Genre(1, "")));
+		when(bookDao.deleteById(1)).thenReturn(true);
 		library.removeBookById(1);
-		verify(bookDao, times(1)).getBookById(1);
-		verify(bookDao, times(1)).deleteBookById(1);
+		verify(bookDao, times(1)).findById(1);
+		verify(bookDao, times(1)).deleteById(1);
 	}
 
 	@DisplayName("insert")
 	@Test
 	void insertTest() {
-		library.setBook(new Book(0, TITLE_1, new Author(1, AUTHOR_PUSHKIN), new Genre(1, "")));
+		library.saveBook(new Book(0, TITLE_1, new Author(1, AUTHOR_PUSHKIN), new Genre(1, "")));
 		verify(bookDao, times(1)).insertBook(TITLE_1, 1, 1);
-		verify(genreDao, times(0)).getGenreById(1);
-		verify(authorDao, times(0)).getAuthorById(1);
+		verify(genreDao, times(0)).findById(1);
+		verify(authorDao, times(0)).findById(1);
 
 		when(authorDao.insertAuthor(AUTHOR_PUSHKIN)).thenReturn(new Author(1, AUTHOR_PUSHKIN));
-		library.setBook(new Book(0, TITLE_1, new Author(0, AUTHOR_PUSHKIN), new Genre(1, "")));
+		library.saveBook(new Book(0, TITLE_1, new Author(0, AUTHOR_PUSHKIN), new Genre(1, "")));
 		verify(authorDao, times(1)).insertAuthor(AUTHOR_PUSHKIN);
 	}
 }

@@ -7,7 +7,7 @@ import ru.otus.trim.domain.Genre;
 import java.util.List;
 
 public interface LibraryService {
-    Book setBook(Book book);
+    Book saveBook(Book book);
 
     Book removeBookById(long bookID);
 

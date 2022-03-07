@@ -5,7 +5,7 @@ import ru.otus.trim.domain.Genre;
 import java.util.List;
 
 public interface GenreDao {
-    Genre getGenreById(int id);
+    Genre findById(int id);
 
-    List<Genre> getAllGenres();
+    List<Genre> findAll();
 }

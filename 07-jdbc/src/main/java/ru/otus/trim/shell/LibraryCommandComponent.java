@@ -12,7 +12,7 @@ import java.util.List;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class QuizCommandComponent {
+public class LibraryCommandComponent {
 
     private final LibraryService library;
 
@@ -22,15 +22,15 @@ public class QuizCommandComponent {
     }
 
     @ShellMethod(value = "Add book", key = "ins_book")
-    public Book addBook(String title, String author, String genre) {
-        return library.setBook(new Book(0, title, addAuthor(author), library.getGenre(genre)));
+    public Book setBookGenre(String title, String author, String genre) {
+        return library.saveBook(new Book(0, title, addAuthor(author), library.getGenre(genre)));
     }
 
     @ShellMethod(value = "Set book genre", key = "set_genre")
-    public Book addBook(long bookID, String genre) {
+    public Book setBookGenre(long bookID, String genre) {
         Book book = library.getBookById(bookID);
         book.setGenre(library.getGenre(genre));
-        return library.setBook(book);
+        return library.saveBook(book);
     }
 
     @ShellMethod(value = "Remove book", key = "remove_book")

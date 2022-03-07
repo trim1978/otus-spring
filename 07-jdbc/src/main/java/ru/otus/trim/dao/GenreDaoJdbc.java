@@ -21,7 +21,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public Genre getGenreById(int id) {
+    public Genre findById(int id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedParameterJdbcOperations.queryForStream(
                 "select id, name from genres where id = :id", params, new GenreMapper()
@@ -29,7 +29,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public List<Genre> getAllGenres() {
+    public List<Genre> findAll() {
         return namedParameterJdbcOperations.query("select id, name from genres", new GenreMapper());
     }
 

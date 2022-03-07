@@ -38,7 +38,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public Author getAuthorById(int id) {
+    public Author findById(int id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedParameterJdbcOperations.queryForObject(
                 "select id, name from authors where id = :id", params, new AuthorMapper()
@@ -59,7 +59,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public boolean deleteAuthorById(int id) {
+    public boolean deleteById(int id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         namedParameterJdbcOperations.update(
                 "delete from authors where id = :id", params

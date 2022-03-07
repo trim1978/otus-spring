@@ -30,7 +30,7 @@ class BookDaoTests {
         assertThat(book.getTitle()).isEqualTo("Metel");
         assertThat(book.getAuthor().getName()).isEqualTo("Pushkin");
         assertThat(book.getGenre().getName()).isEqualTo("drama");
-        assertThat(library.getBookById(book.getId())).isEqualTo(book);
+        assertThat(library.findById(book.getId())).isEqualTo(book);
     }
 
     @DisplayName("update")
@@ -38,8 +38,8 @@ class BookDaoTests {
     @Test
     void updateTest() {
         Book book = library.insertBook("Metel", 1, 6);
-        library.updateBookById(book.getId(), 4);
-        assertThat(library.getBookById(book.getId()).getGenre().getName()).isEqualTo("lyric");
+        library.updateById(book.getId(), 4);
+        assertThat(library.findById(book.getId()).getGenre().getName()).isEqualTo("lyric");
     }
 
     @DisplayName("delete")
@@ -47,8 +47,8 @@ class BookDaoTests {
     @Test
     void deleteTest() {
         Book book = library.insertBook("Metel", 1, 6);
-        library.deleteBookById(book.getId());
-        assertThat(library.getBookById(book.getId())).isNull();
+        library.deleteById(book.getId());
+        assertThat(library.findById(book.getId())).isNull();
     }
 
     @DisplayName("select")

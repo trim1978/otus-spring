@@ -25,7 +25,7 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional
     @Override
-    public Book setBook(Book book) {
+    public Book saveBook(Book book) {
         Genre genre = book.getGenre();
         int genreId = genre.getId();
 //        if (genreId == 0) {
@@ -38,7 +38,7 @@ public class LibraryServiceImpl implements LibraryService {
             }
             return books.insertBook(book.getTitle(), author.getId(), genreId);
         } else {
-            books.updateBookById(book.getId(), genreId);
+            books.updateById(book.getId(), genreId);
         }
         return book;
     }
@@ -46,15 +46,15 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     @Override
     public Book removeBookById(long bookID) {
-        Book book = books.getBookById(bookID);
-        if (book != null && !books.deleteBookById(bookID)) book = null;
+        Book book = books.findById(bookID);
+        if (book != null && !books.deleteById(bookID)) book = null;
         return book;
     }
 
     @Transactional(readOnly = true)
     @Override
     public Book getBookById(long bookID) {
-        return books.getBookById(bookID);
+        return books.findById(bookID);
     }
 
     @Transactional(readOnly = true)
@@ -72,7 +72,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional(readOnly = true)
     @Override
     public Genre getGenre(String name) {
-        return genres.getAllGenres().stream().filter(t -> t.getName().equalsIgnoreCase(name)).findAny().orElse(null);
+        return genres.findAll().stream().filter(t -> t.getName().equalsIgnoreCase(name)).findAny().orElse(null);
     }
 
     @Transactional(readOnly = true)
@@ -84,6 +84,6 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional(readOnly = true)
     @Override
     public List<Genre> getGenres() {
-        return genres.getAllGenres();
+        return genres.findAll();
     }
 }

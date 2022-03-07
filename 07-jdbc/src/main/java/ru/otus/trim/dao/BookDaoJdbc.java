@@ -34,13 +34,13 @@ public class BookDaoJdbc implements BookDao {
         params.addValue("genre", genreId);
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("INSERT INTO books(title,author,genre) VALUES (:title,:author,:genre)", params, kh);
-        return new Book(Objects.requireNonNull(kh.getKey()).longValue(), title, authorDao.getAuthorById(authorId), genreDao.getGenreById(genreId));
+        return new Book(Objects.requireNonNull(kh.getKey()).longValue(), title, authorDao.findById(authorId), genreDao.findById(genreId));
     }
 
     private static final String BOOK_REQUEST = "select book.id id, book.title title, book.author author_id, book.genre genre_id, author.name author_name, genre.name genre_name from books book left join authors author on author.id = book.author left join genres genre on genre.id = book.genre";
 
     @Override
-    public Book getBookById(long id) {
+    public Book findById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedParameterJdbcOperations.queryForStream(
                 BOOK_REQUEST + " where book.id = :id", params, new BookMapper()
@@ -53,7 +53,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public boolean deleteBookById(long id) {
+    public boolean deleteById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedParameterJdbcOperations.update(
                 "delete from books where id = :id", params
@@ -61,7 +61,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void updateBookById(long id, int genre) {
+    public void updateById(long id, int genre) {
         Map<String, Object> params = new HashMap<>(2);
         params.put("id", id);
         params.put("genre", genre);
@@ -73,7 +73,7 @@ public class BookDaoJdbc implements BookDao {
     private static class BookMapper implements RowMapper<Book> {
         @Override
         public Book mapRow(ResultSet resultSet, int i) throws SQLException {
-            long id = resultSet.getInt("id");
+            long id = resultSet.getLong("id");
             String title = resultSet.getString("title");
             int author_id = resultSet.getInt("author_id");
             int genre_id = resultSet.getInt("genre_id");

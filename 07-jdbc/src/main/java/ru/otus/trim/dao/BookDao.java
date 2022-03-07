@@ -7,11 +7,11 @@ import java.util.List;
 public interface BookDao {
     List<Book> getAllBooks();
 
-    boolean deleteBookById(long id);
+    boolean deleteById(long id);
 
-    void updateBookById(long id, int genre);
+    void updateById(long id, int genre);
 
     Book insertBook(String title, int authorId, int genreId);
 
-    Book getBookById(long id);
+    Book findById(long id);
 }
