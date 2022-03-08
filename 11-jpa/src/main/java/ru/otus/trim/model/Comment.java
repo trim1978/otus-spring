@@ -9,6 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +17,11 @@ public class Comment {
 
     private String text;
 
-    @OneToOne(orphanRemoval = true)
+    @ManyToOne()
     // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
-    @JoinColumn(name = "book")
+    @JoinColumn(name = "book", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Book book;
 
     private Date datetime;

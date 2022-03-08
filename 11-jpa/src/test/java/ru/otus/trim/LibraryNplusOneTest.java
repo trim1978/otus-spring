@@ -46,8 +46,8 @@ class LibraryNplusOneTest {
         val comments = repositoryJpa.getBooks();
         assertThat(comments).isNotNull().hasSize(2)
                 .allMatch(s -> !s.getTitle().equals(""))
-                .allMatch(s -> s.getAuthor() != null)
-                .allMatch(s -> s.getGenre() != null)
+                .allMatch(s -> s.getAuthors().size() > 0)
+                .allMatch(s -> s.getGenres().size() > 0)
                 //.allMatch(s -> s.getEmails() != null && s.getEmails().size() > 0)
         ;
         System.out.println("----------------------------------------------------------------------------------------------------------\n\n\n\n");
@@ -66,8 +66,8 @@ class LibraryNplusOneTest {
         assertThat(comments).isNotNull().hasSize(4)
                 .allMatch(s -> !s.getText().equals(""))
                 .allMatch(s -> s.getBook() != null)
-                .allMatch(s -> s.getBook().getAuthor() != null)
-                .allMatch(s -> s.getBook().getGenre() != null)
+                .allMatch(s -> s.getBook().getAuthors().size() > 0)
+                .allMatch(s -> s.getBook().getGenres().size() > 0)
         //.allMatch(s -> s.getEmails() != null && s.getEmails().size() > 0)
         ;
         System.out.println("----------------------------------------------------------------------------------------------------------\n\n\n\n");

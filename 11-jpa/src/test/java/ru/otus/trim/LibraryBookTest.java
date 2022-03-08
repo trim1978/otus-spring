@@ -7,7 +7,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
+import ru.otus.trim.model.Genre;
 import ru.otus.trim.service.LibraryServiceImpl;
 
 import java.util.List;
@@ -54,10 +56,12 @@ class LibraryBookTest {
     @Test
     void shouldAddBookById() {
         Book book = library.addBook("Na dne", "Gorky", "drama");
+        Genre genre = library.getGenre("drama");
+        Author author = library.getAuthor("Gorky");
         assertThat(book).matches(t -> t.getTitle().equalsIgnoreCase("Na dne"))
-                .matches(t -> t.getGenre().getName().equals("drama"))
+                .matches(t -> t.getGenres().contains(genre))
                 .matches(t -> t.getId() > 0)
-            .matches(t -> t.getAuthor().getName().equals("Gorky"));
+            .matches(t -> t.getAuthors().contains(author));
         assertThat(book).isIn(library.getBooks());
     }
 }

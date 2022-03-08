@@ -18,6 +18,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select c from Comment c where c.book.id = :book")
     List<Comment> findByBookId(@Param("book") long book);
 
+    //@EntityGraph(value = "post-entity-graph")
+    //TODO List<Comment> findByBookId(long book);
+
     @Modifying
     @Query("update Comment c set c.text = :text where c.id = :id")
     void updateTextById(@Param("id") long id, @Param("text") String text);

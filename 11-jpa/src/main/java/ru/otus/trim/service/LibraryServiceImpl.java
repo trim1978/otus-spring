@@ -45,7 +45,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     @Override
     public Book addBook(String title, String author, String genre) {
-        Book book = new Book(0L, title, getAuthor(author), getGenre(genre));
+        Book book = new Book(title, getAuthor(author), getGenre(genre));
         books.save(book);
         return book;
     }
@@ -54,14 +54,14 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Author getAuthor(String name) {
         Optional<Author> author = authors.findByName(name);
-        return author.orElseGet(() -> authors.save(new Author(0, name)));
+        return author.orElseGet(() -> authors.save(new Author(name)));
     }
 
     @Transactional
     @Override
     public Genre getGenre(String name) {
         Optional<Genre> genre = genres.findByName(name);
-        return genre.orElseGet(() -> genres.save(new Genre(0, name)));
+        return genre.orElseGet(() -> genres.save(new Genre(name)));
     }
 
     @Transactional(readOnly = true)
