@@ -5,24 +5,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import ru.otus.trim.model.Comment;
 
 import java.util.List;
 
+@Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @EntityGraph(attributePaths = "book")
     List<Comment> findAll();
 
-    @EntityGraph(attributePaths = {"book"})
-    @Query("select c from Comment c where c.book.id = :book")
-    List<Comment> findByBookId(@Param("book") long book);
-
-    //@EntityGraph(value = "post-entity-graph")
-    //TODO List<Comment> findByBookId(long book);
+    @EntityGraph(attributePaths = "book")
+    List<Comment> findByBookId(long book);
 
     @Modifying
     @Query("update Comment c set c.text = :text where c.id = :id")
     void updateTextById(@Param("id") long id, @Param("text") String text);
-
 }

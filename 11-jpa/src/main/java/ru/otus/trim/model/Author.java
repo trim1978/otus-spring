@@ -5,12 +5,13 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "authors")
+@ToString
+@Getter
+@Setter
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

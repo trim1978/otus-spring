@@ -10,10 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AuthorRepository extends JpaRepository<Author, Integer> {
-
     List<Author> findAll();
     Optional<Author> findByName(String s);
-
-    List<Author> findAll(Sort sort); // TODO
-    Page<Author> findAll(Pageable pageabale); // TODO
 }

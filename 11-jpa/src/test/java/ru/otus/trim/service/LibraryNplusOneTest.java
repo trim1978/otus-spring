@@ -1,4 +1,4 @@
-package ru.otus.trim;
+package ru.otus.trim.service;
 
 import lombok.val;
 import org.hibernate.SessionFactory;
@@ -7,21 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import ru.otus.trim.model.Book;
-import ru.otus.trim.service.LibraryServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий на основе Jpa для работы со библиотекой")
 @DataJpaTest
-@ComponentScan("ru.otus.trim")
 @Import(LibraryServiceImpl.class)
 class LibraryNplusOneTest {
 
     @Autowired
-    private LibraryServiceImpl repositoryJpa;
+    private LibraryServiceImpl library;
 
     @Autowired
     private TestEntityManager em;
@@ -29,7 +26,7 @@ class LibraryNplusOneTest {
     @DisplayName(" должен загружать информацию о нужном студенте по его id")
     @Test
     void shouldFindExpectedStudentById() {
-        val optionalActualStudent = repositoryJpa.getBookById(1L);
+        val optionalActualStudent = library.getBookById(1L);
         val expectedStudent = em.find(Book.class, 1L);
         assertThat(optionalActualStudent).usingRecursiveComparison().isEqualTo(expectedStudent);
     }
@@ -43,7 +40,7 @@ class LibraryNplusOneTest {
 
 
         System.out.println("\n\n\n\n----------------------------------------------------------------------------------------------------------");
-        val comments = repositoryJpa.getBooks();
+        val comments = library.getBooks();
         assertThat(comments).isNotNull().hasSize(2)
                 .allMatch(s -> !s.getTitle().equals(""))
                 .allMatch(s -> s.getAuthors().size() > 0)
@@ -62,7 +59,7 @@ class LibraryNplusOneTest {
 
 
         System.out.println("\n\n\n\n----------------------------------------------------------------------------------------------------------");
-        val comments = repositoryJpa.getComments(2);
+        val comments = library.getComments(2);
         assertThat(comments).isNotNull().hasSize(4)
                 .allMatch(s -> !s.getText().equals(""))
                 .allMatch(s -> s.getBook() != null)

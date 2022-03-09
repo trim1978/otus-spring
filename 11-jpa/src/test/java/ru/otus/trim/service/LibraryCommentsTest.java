@@ -1,4 +1,4 @@
-package ru.otus.trim;
+package ru.otus.trim.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,14 +14,10 @@ import ru.otus.trim.service.LibraryServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий коментариев")
-@ComponentScan("ru.otus.trim")
 @DataJpaTest
 @RunWith(SpringRunner.class)
 @Import(LibraryServiceImpl.class)
 class LibraryCommentsTest {
-
-    //@Autowired
-    //private TestEntityManager testEntityManager;
 
     @Autowired
     private LibraryServiceImpl library;
@@ -47,7 +43,7 @@ class LibraryCommentsTest {
     @Test
     void shouldSetComment() {
         Comment comment = library.addComment(1, "comment");
-        library.changeComment(comment.getId(),"changed");
+        comment = library.changeComment(comment.getId(),"changed");
         assertThat(comment).matches(t -> t.getText().equalsIgnoreCase("changed"))
                 .matches(t -> t.getDatetime().getTime() > 0L)
                 .matches(t -> t.getId() > 0);

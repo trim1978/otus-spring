@@ -5,11 +5,13 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "comments")
+@ToString
+@Getter
+@Setter
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

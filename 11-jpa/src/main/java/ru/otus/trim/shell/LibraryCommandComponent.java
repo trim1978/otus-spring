@@ -28,8 +28,12 @@ public class LibraryCommandComponent {
     }
 
     @ShellMethod(value = "Get book", key = {"get_book", "gb"})
-    public Book getBook(long bookID) {
-        return library.getBookById(bookID);
+    public String getBook(long bookID) {
+        Book book = library.getBookById(bookID);
+        if (book != null) {
+            return book.getId() + ", " + book.getTitle()+ ", " + book.getAuthors();
+        }
+        return "";
     }
 
     @ShellMethod(value = "Add book", key = {"add_book", "ab"})
@@ -68,8 +72,9 @@ public class LibraryCommandComponent {
     }
 
     @ShellMethod(value = "Change comment", key = {"change_comment","cc"})
-    public void changeComment(long commentID, String text) {
-        library.changeComment(commentID, text);
+    public String changeComment(long commentID, String text) {
+        Comment comment = library.changeComment(commentID, text);
+        return comment.getId() + ": "  + comment.getText() + " : " + comment.getDatetime();
     }
 
 }
