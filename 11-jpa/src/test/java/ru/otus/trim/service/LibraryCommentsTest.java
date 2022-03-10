@@ -14,6 +14,7 @@ import ru.otus.trim.service.LibraryServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий коментариев")
+@ComponentScan("ru.otus.trim")
 @DataJpaTest
 @RunWith(SpringRunner.class)
 @Import(LibraryServiceImpl.class)

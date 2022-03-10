@@ -2,11 +2,15 @@ spring:
   datasource:
     url: jdbc:h2:mem:library
     initialization-mode: always
+  sql:
+    init:
+      mode: always
 
   jpa:
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
+    show-sql: true
 
   shell:
     interactive:
@@ -17,9 +21,6 @@ spring:
     properties:
       hibernate:
         format_sql: false
-
-    show-sql: true
-
 
 logging:
   level:

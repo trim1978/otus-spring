@@ -19,6 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("Репозиторий Book должен")
+@ComponentScan("ru.otus.trim")
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @Import(LibraryServiceImpl.class)

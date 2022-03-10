@@ -19,12 +19,7 @@ public class Genre {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "genres")
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "genres")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Book> books;

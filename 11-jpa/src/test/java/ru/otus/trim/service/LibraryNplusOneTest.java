@@ -4,16 +4,21 @@ import lombok.val;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.otus.trim.model.Book;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий на основе Jpa для работы со библиотекой")
 @DataJpaTest
+@RunWith(SpringRunner.class)
+@ComponentScan("ru.otus.trim")
 @Import(LibraryServiceImpl.class)
 class LibraryNplusOneTest {
 
@@ -48,7 +53,7 @@ class LibraryNplusOneTest {
                 //.allMatch(s -> s.getEmails() != null && s.getEmails().size() > 0)
         ;
         System.out.println("----------------------------------------------------------------------------------------------------------\n\n\n\n");
-        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(1);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(3);
     }
     @DisplayName("должен загружать список всех комментариев с полной информацией о них")
     @Test
@@ -68,6 +73,6 @@ class LibraryNplusOneTest {
         //.allMatch(s -> s.getEmails() != null && s.getEmails().size() > 0)
         ;
         System.out.println("----------------------------------------------------------------------------------------------------------\n\n\n\n");
-        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(3);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(6);
     }
 }

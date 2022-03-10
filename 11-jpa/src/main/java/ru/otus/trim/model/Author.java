@@ -19,12 +19,7 @@ public class Author {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "authors")
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "authors")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Book> books;

@@ -1,6 +1,8 @@
 package ru.otus.trim.model;
 
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,31 +21,24 @@ public class Book {
 
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "book_authors",
-            joinColumns = @JoinColumn(name = "book"),
+    @Fetch(FetchMode.SUBSELECT)
+    @ManyToMany(targetEntity = Author.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "book_authors", joinColumns = @JoinColumn(name = "book"),
             inverseJoinColumns = @JoinColumn(name = "author"))
-    @ToString.Exclude
+    //@ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Author> authors;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @Fetch(FetchMode.SUBSELECT)
+    @ManyToMany(targetEntity = Genre.class, fetch = FetchType.EAGER)
     @JoinTable(name = "book_genres",
             joinColumns = @JoinColumn(name = "book"),
             inverseJoinColumns = @JoinColumn(name = "genre"))
-    @ToString.Exclude
+    //@ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Genre> genres;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY,
+    @OneToMany(targetEntity = Comment.class, mappedBy = "book", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
