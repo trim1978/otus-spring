@@ -21,22 +21,19 @@ public class Book {
 
     private String title;
 
-    @Fetch(FetchMode.SUBSELECT)
-    @ManyToMany(targetEntity = Author.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "book_authors", joinColumns = @JoinColumn(name = "book"),
-            inverseJoinColumns = @JoinColumn(name = "author"))
-    //@ToString.Exclude
+    @ManyToOne()
+    // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
+    @JoinColumn(name = "author", nullable = false)
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Author> authors;
+    private Author author;
 
-    @Fetch(FetchMode.SUBSELECT)
-    @ManyToMany(targetEntity = Genre.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "book_genres",
-            joinColumns = @JoinColumn(name = "book"),
-            inverseJoinColumns = @JoinColumn(name = "genre"))
-    //@ToString.Exclude
+    @ManyToOne()
+    // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
+    @JoinColumn(name = "genre", nullable = false)
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Genre> genres;
+    private Genre genre;
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "book", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
@@ -45,7 +42,14 @@ public class Book {
     private List<Comment> comments;
 
     public Book(String title, Author author, Genre genre) {
-        this (0, title, List.of(author), List.of(genre), List.of());
+        this (0, title, author, genre, List.of());
     }
 
+    // для совместимости теста
+    public List<Genre> getGenres (){
+        return  List.of(genre);
+    }
+    public List<Author> getAuthors (){
+        return  List.of(author);
+    }
 }
