@@ -7,9 +7,9 @@ spring:
       mode: always
 
   jpa:
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     show-sql: true
 
   main:
