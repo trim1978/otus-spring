@@ -19,7 +19,7 @@ public class Comment {
 
     private String text;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
     @JoinColumn(name = "book", nullable = false)
     @ToString.Exclude

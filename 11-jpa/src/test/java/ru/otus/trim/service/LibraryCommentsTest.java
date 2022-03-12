@@ -13,10 +13,8 @@ import ru.otus.trim.service.LibraryServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Репозиторий коментариев")
-@ComponentScan("ru.otus.trim")
+@DisplayName("Репозиторий CRUD для коментариев")
 @DataJpaTest
-@RunWith(SpringRunner.class)
 @Import(LibraryServiceImpl.class)
 class LibraryCommentsTest {
 

@@ -13,13 +13,9 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @EntityGraph(attributePaths = "book")
+    //@EntityGraph(attributePaths = "book")
     List<Comment> findAll();
 
-    @EntityGraph(attributePaths = "book")
+    //@EntityGraph(attributePaths = "book")
     List<Comment> findByBookId(long book);
-
-    @Modifying
-    @Query("update Comment c set c.text = :text where c.id = :id")
-    void updateTextById(@Param("id") long id, @Param("text") String text);
 }
