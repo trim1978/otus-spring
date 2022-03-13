@@ -7,6 +7,9 @@ spring:
     init:
       mode: always
 
+  shell:
+    interactive:
+      enabled: false
 
   jpa:
     #hibernate:

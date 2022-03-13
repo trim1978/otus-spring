@@ -3,7 +3,6 @@ package ru.otus.trim.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,13 +18,8 @@ public class Genre {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "genres")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Book> books;
-
     public Genre(String name) {
-        this( 0, name, List.of());
+        this( 0, name);
     }
 
 }
