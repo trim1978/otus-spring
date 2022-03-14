@@ -11,31 +11,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-public class AuthorController {
+@RequestMapping("rest")
+public class AuthorRestController {
 
     private final AuthorRepository repository;
 
-    public AuthorController(AuthorRepository repository) {
+    public AuthorRestController(AuthorRepository repository) {
         this.repository = repository;
     }
 
-    @RequestMapping(value = "/authors/all", method = RequestMethod.GET, params = {})
-    public List<AuthorDto> getAllPersons() {
+    @RequestMapping(value = "/authors1", method = RequestMethod.GET, params = {})
+    public List<AuthorDto> getAllAuthors() {
         return repository.findAll().stream()
                 .map(AuthorDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/authors", method = RequestMethod.GET)
-    public AuthorDto getPersonByIdInRequest(@RequestParam("id") int id) {
-        Author person = repository.findById(id).orElseThrow(NotFoundException::new);
-        return AuthorDto.toDto(person);
+    @RequestMapping(value = "/author", method = RequestMethod.GET)
+    public AuthorDto getAuthorByIdInRequest(@RequestParam("id") int id) {
+        Author author = repository.findById(id).orElseThrow(NotFoundException::new);
+        return AuthorDto.toDto(author);
     }
 
-    @GetMapping("/authors/{id}")
-    public AuthorDto getPersonByIdInPath(@PathVariable("id") int id) {
-        Author person = repository.findById(id).orElseThrow(NotFoundException::new);
-        return AuthorDto.toDto(person);
+    @GetMapping("/author/{id}")
+    public AuthorDto getAuthorByIdInPath(@PathVariable("id") int id) {
+        Author author = repository.findById(id).orElseThrow(NotFoundException::new);
+        return AuthorDto.toDto(author);
     }
 
     @ExceptionHandler(NotFoundException.class)

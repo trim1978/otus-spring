@@ -5,6 +5,8 @@ spring:
   sql:
     init:
       mode: always
+  messages:
+    encoding: UTF-8
 
   jpa:
     generate-ddl: false
@@ -21,4 +23,4 @@ spring:
 
 logging:
   level:
-    ROOT: ERROR
+    ROOT: INFO
