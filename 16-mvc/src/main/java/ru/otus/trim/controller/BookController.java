@@ -1,5 +1,6 @@
 package ru.otus.trim.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,17 +17,12 @@ import ru.otus.trim.rest.dto.GenreDto;
 
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Controller
 public class BookController {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
-
-    public BookController(BookRepository bookRepository, AuthorRepository authorRepository, GenreRepository genreRepository) {
-        this.bookRepository = bookRepository;
-        this.authorRepository = authorRepository;
-        this.genreRepository = genreRepository;
-    }
 
     @GetMapping("/books")
     public String getAllBooks(Model model) {
@@ -52,7 +48,7 @@ public class BookController {
     }
 
     @PostMapping("/book")
-    public String savePerson(@ModelAttribute("book") BookDto book,
+    public String saveBook(@ModelAttribute("book") BookDto book,
                              BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "book_edit";

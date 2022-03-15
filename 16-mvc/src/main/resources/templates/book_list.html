@@ -44,12 +44,6 @@
 </head>
 <body>
 
-<h3 th:text="#{lang-switcher-header}">Select language</h3>
-<div>
-    <div><a href="#" th:href="@{/books(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a></div>
-    <div><a href="#" th:href="@{/books(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a></div>
-</div>
-
 <h3 th:text="#{books-table-header}">Books:</h3>
 
 <table class="books">
@@ -60,6 +54,7 @@
         <th>Author</th>
         <th>Genre</th>
         <th>Action</th>
+        <th>Comments</th>
     </tr>
     </thead>
     <tbody>
@@ -72,6 +67,9 @@
         <td th:text="${book.genre.name}">Genre</td>
         <td>
             <a th:href="@{/book/(id=${book.id})}" href="book_edit.html" th:text="#{edit-button-caption}">Edit</a>
+        </td>
+        <td>
+            <a th:href="@{/comments_book/(book=${book.id})}" href="comment_list.html">View</a>
         </td>
     </tr>
     </tbody>

@@ -45,6 +45,10 @@ public class Book {
         this (0, title, author, genre, List.of());
     }
 
+    public Book(long id) {
+        this.id = id;
+    }
+
     // для совместимости теста
     public List<Genre> getGenres (){
         return  List.of(genre);

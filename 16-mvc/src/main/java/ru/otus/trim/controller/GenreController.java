@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 
 @Controller
 public class GenreController {
-    private final GenreRepository repository;
+    private final GenreRepository genreRepository;
 
-    public GenreController(GenreRepository repository) {
-        this.repository = repository;
+    public GenreController(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
     }
     @GetMapping("/genres")
     public String getAllGenres(Model model) {
-        model.addAttribute("genres",repository.findAll().stream()
+        model.addAttribute("genres",genreRepository.findAll().stream()
                 .map(GenreDto::toDto)
                 .collect(Collectors.toList()));
         return "genre_list";

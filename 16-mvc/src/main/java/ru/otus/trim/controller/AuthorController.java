@@ -12,32 +12,32 @@ import java.util.stream.Collectors;
 
 @Controller
 public class AuthorController {
-    private final AuthorRepository repository;
+    private final AuthorRepository authorRepository;
 
-    public AuthorController(AuthorRepository repository) {
-        this.repository = repository;
+    public AuthorController(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
     @GetMapping("/authors")
     public String getAllAuthors(Model model) {
-        model.addAttribute("authors",repository.findAll().stream()
+        model.addAttribute("authors",authorRepository.findAll().stream()
                 .map(AuthorDto::toDto)
                 .collect(Collectors.toList()));
         return "author_list";
     }
 
     @GetMapping("/author")
-    public String getBook(@RequestParam("id") int id, Model model) {
-        model.addAttribute("author",id > 0 ? AuthorDto.toDto (repository.findById(id).orElseThrow()): new AuthorDto (0, ""));
+    public String getAuthor(@RequestParam("id") int id, Model model) {
+        model.addAttribute("author",id > 0 ? AuthorDto.toDto (authorRepository.findById(id).orElseThrow()): new AuthorDto (0, ""));
         return "author_edit";
     }
 
     @PostMapping("/author")
-    public String savePerson(@ModelAttribute("author") AuthorDto author,
+    public String saveAuthor(@ModelAttribute("author") AuthorDto author,
                              BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "author_edit";
         }
-        repository.save(author.toDomainObject());
+        authorRepository.save(author.toDomainObject());
         return "redirect:/authors";
     }
 

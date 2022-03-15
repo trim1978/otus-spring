@@ -10,9 +10,12 @@
 package ru.otus.trim.rest.dto;
 
 import lombok.*;
+import ru.otus.trim.model.Book;
+import ru.otus.trim.model.Comment;
+
+import java.util.Date;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @Getter
 @Setter
@@ -20,13 +23,26 @@ import lombok.*;
 public class CommentDto {
 
     private long id;
+    private long book;
     private String text;
+    private Date datetime;
 
-//    public static Comment toDomainObject(CommentDto dto) {
-//        return new Comment(dto.getId(), dto.getTitle());
-//    }
-//
-//    public static CommentDto toDto(Comment person) {
-//        return new CommentDto(person.getId(), person.getTitle());
-//    }
+    public CommentDto(long id, long book, String text, Date datetime) {
+        this.id = id;
+        this.book = book;
+        this.text = text;
+        this.datetime = datetime;
+    }
+
+    public CommentDto(long book) {
+        this.book = book;
+    }
+
+    public Comment toDomainObject(Book book) {
+        return new Comment(getId(), getText(), book, new Date ());
+    }
+
+    public static CommentDto toDto(Comment comment) {
+        return new CommentDto(comment.getId(), comment.getBook().getId(), comment.getText(), comment.getDatetime());
+    }
 }
