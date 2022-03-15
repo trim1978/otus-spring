@@ -44,11 +44,11 @@ public class GenreDto {
         this.name = name;
     }
 
-    public static Genre toDomainObject(GenreDto dto) {
-        return new Genre(dto.getId(), dto.getName());
+    public Genre toDomainObject() {
+        return new Genre(getId(), getName());
     }
 
-    public static GenreDto toDto(Genre person) {
-        return new GenreDto(person.getId(), person.getName());
+    public static GenreDto toDto(Genre genre) {
+        return new GenreDto(genre.getId(), genre.getName());
     }
 }

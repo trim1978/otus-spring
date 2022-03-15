@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("rest")
 public class GenreRestController {
 
     private final GenreRepository repository;
@@ -20,20 +19,20 @@ public class GenreRestController {
         this.repository = repository;
     }
 
-    @RequestMapping(value = "/genres", method = RequestMethod.GET, params = {})
+    @RequestMapping(value = "/rest_genres", method = RequestMethod.GET, params = {})
     public List<GenreDto> getAllGenres() {
         return repository.findAll().stream()
                 .map(GenreDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/genres", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest_genre", method = RequestMethod.GET)
     public GenreDto getGenreByIdInRequest(@RequestParam("id") int id) {
         Genre genre = repository.findById(id).orElseThrow(NotFoundException::new);
         return GenreDto.toDto(genre);
     }
 
-    @GetMapping("/genres/{id}")
+    @GetMapping("/rest_genre/{id}")
     public GenreDto getGenreByIdInPath(@PathVariable("id") int id) {
         Genre genre = repository.findById(id).orElseThrow(NotFoundException::new);
         return GenreDto.toDto(genre);

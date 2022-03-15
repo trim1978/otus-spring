@@ -2,8 +2,9 @@ package ru.otus.trim.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.rest.dto.AuthorDto;
 
@@ -24,14 +25,20 @@ public class AuthorController {
         return "author_list";
     }
 
-    @GetMapping("/author/{id}")
-    public String getBook(Model model, @PathVariable int id) {
+    @GetMapping("/author")
+    public String getBook(@RequestParam("id") int id, Model model) {
         model.addAttribute("author",AuthorDto.toDto (repository.findById(id).orElseThrow()));
         return "author_edit";
     }
 
-    @GetMapping("/r")
-    public String getAllAuthors() {
-        return "redirect:all ";
+    @PostMapping("/author")
+    public String savePerson(@ModelAttribute("author") AuthorDto author,
+                             BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "author_edit";
+        }
+        repository.save(author.toDomainObject());
+        return "redirect:/authors";
     }
+
 }

@@ -12,6 +12,8 @@ package ru.otus.trim.rest.dto;
 import lombok.*;
 import ru.otus.trim.model.Book;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -23,11 +25,14 @@ public class BookDto {
     private long id;
     private String title;
 
-//    public static Book toDomainObject(BookDto dto) {
-//        return new Book(dto.getId(), dto.getTitle());
-//    }
-//
-//    public static BookDto toDto(Book person) {
-//        return new BookDto(person.getId(), person.getTitle());
-//    }
+    private AuthorDto author;
+    private GenreDto genre;
+
+    public Book toDomainObject() {
+        return new Book(getId(), getTitle(), author.toDomainObject(), genre.toDomainObject(), List.of());
+    }
+
+    public static BookDto toDto(Book book) {
+        return new BookDto(book.getId(), book.getTitle(), AuthorDto.toDto(book.getAuthor()), GenreDto.toDto(book.getGenre()));
+    }
 }

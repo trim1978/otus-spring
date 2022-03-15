@@ -46,27 +46,23 @@
 
 <h3 th:text="#{lang-switcher-header}">Select language</h3>
 <div>
-    <div><a href="#" th:href="@{/(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a></div>
-    <div><a href="#" th:href="@{/(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a></div>
+    <div><a href="#" th:href="@{/genres(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a></div>
+    <div><a href="#" th:href="@{/genres(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a></div>
 </div>
 
-<h3 th:text="#{genres-table-header}">Persons:</h3>
+<h3 th:text="#{genres-table-header}">Genres:</h3>
 
 <table class="genres">
     <thead>
     <tr>
         <th>ID</th>
         <th>Name</th>
-        <th>Action</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="genre : ${genres}">
         <td th:text="${genre.id}">1</td>
         <td th:text="${genre.name}">John Doe</td>
-        <td>
-            <a th:href="@{/edit(id=${genre.id})}" href="edit_genre.html" th:text="#{edit-button-caption}">Edit</a>
-        </td>
     </tr>
     </tbody>
 </table>

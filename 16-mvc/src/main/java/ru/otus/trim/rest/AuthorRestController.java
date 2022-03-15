@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("rest")
 public class AuthorRestController {
 
     private final AuthorRepository repository;
@@ -20,20 +19,20 @@ public class AuthorRestController {
         this.repository = repository;
     }
 
-    @RequestMapping(value = "/authors1", method = RequestMethod.GET, params = {})
+    @RequestMapping(value = "/rest_authors", method = RequestMethod.GET, params = {})
     public List<AuthorDto> getAllAuthors() {
         return repository.findAll().stream()
                 .map(AuthorDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/author", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest_author", method = RequestMethod.GET)
     public AuthorDto getAuthorByIdInRequest(@RequestParam("id") int id) {
         Author author = repository.findById(id).orElseThrow(NotFoundException::new);
         return AuthorDto.toDto(author);
     }
 
-    @GetMapping("/author/{id}")
+    @GetMapping("/rest_author/{id}")
     public AuthorDto getAuthorByIdInPath(@PathVariable("id") int id) {
         Author author = repository.findById(id).orElseThrow(NotFoundException::new);
         return AuthorDto.toDto(author);

@@ -44,11 +44,11 @@ public class AuthorDto {
         this.name = name;
     }
 
-    public static Author toDomainObject(AuthorDto dto) {
-        return new Author(dto.getId(), dto.getName());
+    public Author toDomainObject() {
+        return new Author(getId(), getName());
     }
 
-    public static AuthorDto toDto(Author person) {
-        return new AuthorDto(person.getId(), person.getName());
+    public static AuthorDto toDto(Author author) {
+        return new AuthorDto(author.getId(), author.getName());
     }
 }
