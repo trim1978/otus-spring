@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Edit book</title>
+    <title th:if="*{id} != null">Edit book</title>
+    <title th:if="*{id} == null">Create book</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -48,9 +49,12 @@
 <form id="edit-form" action="book_edit.html" th:action="@{/book/(id=${book.id})}" th:method="post" th:object="${book}">
     <h3 th:text = "#{book-form-header}">Book Info:</h3>
 
-    <div class="row">
+    <div class="row" th:if="*{id} > 0">
         <label for="id-input">ID:</label>
         <input id="id-input" type="text" readonly="readonly" th:value="*{id}" value="1"/>
+    </div>
+    <div class="row" th:if="*{id} == 0">
+        <input id="id-def" type="hidden" th:value="0" value="0"/>
     </div>
 
     <div class="row">

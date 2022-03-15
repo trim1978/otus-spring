@@ -27,7 +27,7 @@ public class AuthorController {
 
     @GetMapping("/author")
     public String getBook(@RequestParam("id") int id, Model model) {
-        model.addAttribute("author",AuthorDto.toDto (repository.findById(id).orElseThrow()));
+        model.addAttribute("author",id > 0 ? AuthorDto.toDto (repository.findById(id).orElseThrow()): new AuthorDto (0, ""));
         return "author_edit";
     }
 

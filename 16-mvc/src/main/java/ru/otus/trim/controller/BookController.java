@@ -38,7 +38,7 @@ public class BookController {
 
     @GetMapping("/book")
     public String getBook(@RequestParam("id") long id, Model model) {
-        model.addAttribute("book",BookDto.toDto (bookRepository.findById(id).orElseThrow()));
+        model.addAttribute("book",id > 0 ? BookDto.toDto (bookRepository.findById(id).orElseThrow()) : new BookDto (0, "", new AuthorDto (0, ""), new GenreDto (0, "")));
 
         model.addAttribute("genres",genreRepository.findAll().stream()
                 .map(GenreDto::toDto)
