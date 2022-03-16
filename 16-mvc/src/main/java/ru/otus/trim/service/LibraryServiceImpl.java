@@ -1,6 +1,8 @@
 package ru.otus.trim.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.trim.model.Author;
@@ -40,6 +42,12 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public List<Book> getBooks() {
         return books.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Book> getBooks(Pageable pageable) {
+        return books.findAll(pageable);
     }
 
     @Transactional

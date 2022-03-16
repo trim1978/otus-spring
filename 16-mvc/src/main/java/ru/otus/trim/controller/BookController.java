@@ -1,6 +1,9 @@
 package ru.otus.trim.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.trim.model.Author;
+import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Genre;
 import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.repository.BookRepository;
@@ -29,10 +33,14 @@ public class BookController {
     private final LibraryService library;
 
     @GetMapping("/books")
-    public String getAllBooks(Model model) {
-        model.addAttribute("books",library.getBooks().stream()
+    public String getBooksByPage(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Book> books = library.getBooks(pageable);
+        model.addAttribute("books",books.stream()
                 .map(BookDto::toDto)
                 .collect(Collectors.toList()));
+        model.addAttribute("page", page);
+        model.addAttribute("total", books.getTotalPages());
         return "book_list";
     }
 

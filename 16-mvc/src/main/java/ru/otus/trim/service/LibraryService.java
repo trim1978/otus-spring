@@ -1,5 +1,7 @@
 package ru.otus.trim.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
@@ -11,6 +13,7 @@ public interface LibraryService {
     void removeBookById (long bookID);
     Book getBookById (long bookID);
     List<Book> getBooks ();
+    Page<Book> getBooks (Pageable pageable);
     Book addBook (String title, String author, String genre);
     void updateBook(Book book);
 

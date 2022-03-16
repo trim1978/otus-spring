@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>List of all books</title>
+    <title>List of books</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -45,6 +45,8 @@
 <body>
 
 <h3 th:text="#{books-table-header}">Books:</h3>
+<a th:if="${page} > 0" th:href="@{/books/(page=(${page}-1))}" href="book_list.html">prev</a><span>|</span>
+<a th:if="${total} - 1 > ${page}" th:href="@{/books/(page=(${page}+1))}" href="book_list.html">next</a><span>|</span>
 
 <table class="books">
     <thead>

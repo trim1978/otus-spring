@@ -64,6 +64,11 @@
     </tr>
     </tbody>
 </table>
-<a th:href="@{/author/(id=0)}" href="author_edit.html" th:text="#{add-button-caption}">Add</a>
-</body>
+<span>|</span>
+<a th:href="@{/book/(id=0)}" href="book_edit.html">add book</a><span>|</span>
+<a th:href="@{/books/}" href="book_list.html">books</a><span>|</span>
+<a th:href="@{/books_generate/?count=100}" href="book_list.html">books generate</a><span>|</span>
+<a th:href="@{/author/(id=0)}" href="author_edit.html">add author</a><span>|</span>
+<a th:href="@{/authors/}" href="author_list.html">authors</a><span>|</span>
+<a th:href="@{/genres/}" href="genre_list.html">genres</a><span>|</span></body>
 </html>
