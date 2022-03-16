@@ -1,5 +1,6 @@
 package ru.otus.trim.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -7,16 +8,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.rest.dto.AuthorDto;
+import ru.otus.trim.service.LibraryService;
 
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Controller
 public class AuthorController {
     private final AuthorRepository authorRepository;
 
-    public AuthorController(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
     @GetMapping("/authors")
     public String getAllAuthors(Model model) {
         model.addAttribute("authors",authorRepository.findAll().stream()

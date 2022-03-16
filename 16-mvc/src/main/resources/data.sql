@@ -1,6 +1,9 @@
 insert into authors (id, `name`) values (1, 'Pushkin');
 insert into authors (id, `name`) values (2, 'Lermontov');
 insert into authors (id, `name`) values (3, 'Barto');
+insert into authors (id, `name`) values (4, 'Gogol');
+insert into authors (id, `name`) values (5, 'Nosov');
+insert into authors (id, `name`) values (6, 'Gorky');
 
 insert into genres (id, name) values (1, 'adventures');
 insert into genres (id, name) values (2, 'horror');

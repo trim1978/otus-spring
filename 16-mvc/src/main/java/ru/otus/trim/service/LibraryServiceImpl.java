@@ -52,6 +52,14 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional
     @Override
+    public void updateBook(Book book) {
+        //Book book = new Book(title, getAuthor(author), getGenre(genre));
+        books.save(book);
+        //return book;
+    }
+
+    @Transactional
+    @Override
     public Author getAuthor(String name) {
         Optional<Author> author = authors.findByName(name);
         return author.orElseGet(() -> authors.save(new Author(name)));

@@ -12,6 +12,7 @@ public interface LibraryService {
     Book getBookById (long bookID);
     List<Book> getBooks ();
     Book addBook (String title, String author, String genre);
+    void updateBook(Book book);
 
     Author getAuthor (String name);
     List<Author> getAuthors ();
