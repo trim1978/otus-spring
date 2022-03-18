@@ -1,27 +1,5 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:library
-    initialization-mode: always
-    platform: h2
-  sql:
-    init:
-      mode: always
 
-
-  jpa:
-    hibernate:
-      ddl-auto: none
-    generate-ddl: false
-
-
-    show-sql: true
-
-
-
-    properties:
-      hibernate:
-        id:
-          new_generator_mappings: false # это на случай GenerationType.AUTO
   main:
     banner-mode: off
 

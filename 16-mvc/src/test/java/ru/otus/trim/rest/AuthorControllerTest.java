@@ -32,21 +32,21 @@ class AuthorControllerTest {
     private AuthorRepository repository;
 
     @Test
-    void shouldReturnCorrectPersonsList() throws Exception {
-        List<Author> persons = List.of(new Author(1, "Person1"), new Author(2, "Person2"));
+    void shouldReturnCorrectAuthorsList() throws Exception {
+        List<Author> persons = List.of(new Author(1, "Author1"), new Author(2, "Author2"));
         given(repository.findAll()).willReturn(persons);
 
         List<AuthorDto> expectedResult = persons.stream()
                 .map(AuthorDto::toDto).collect(Collectors.toList());
 
-        mvc.perform(get("/authors/all"))
+        mvc.perform(get("/authors"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
 
     @Test
-    void shouldReturnCorrectPersonByIdInRequest() throws Exception {
-        Author person = new Author(1, "Person1");
+    void shouldReturnCorrectAuthorByIdInRequest() throws Exception {
+        Author person = new Author(1, "Author1");
         given(repository.findById(1)).willReturn(Optional.of(person));
         AuthorDto expectedResult = AuthorDto.toDto(person);
 
@@ -56,18 +56,18 @@ class AuthorControllerTest {
     }
 
     @Test
-    void shouldReturnCorrectPersonByIdInPath() throws Exception {
-        Author person = new Author(1, "Person1");
+    void shouldReturnCorrectAuthorByIdInPath() throws Exception {
+        Author person = new Author(1, "Author1");
         given(repository.findById(1)).willReturn(Optional.of(person));
         AuthorDto expectedResult = AuthorDto.toDto(person);
 
-        mvc.perform(get("/authors/1"))
+        mvc.perform(get("/authors/?id=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
 
     @Test
-    void shouldReturnExpectedErrorWhenPersonNotFound() throws Exception {
+    void shouldReturnExpectedErrorWhenAuthorNotFound() throws Exception {
         given(repository.findById(1)).willReturn(Optional.empty());
 
         mvc.perform(get("/authors").param("id", "1"))
