@@ -33,8 +33,7 @@ class BookControllerTest {
     private static final Genre GENRE = new Genre(1, "test");
     private static final Book BOOK = new Book(1L, "test", AUTHOR, GENRE, List.of());
     private static final Comment COMMENT = new Comment("text", BOOK);
-    private static final List<Book> BOOKS = List.of(BOOK);
-    private static final List<BookDto> BOOK_DTO = List.of(BookDto.toDto(BOOK));
+
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,11 +43,11 @@ class BookControllerTest {
 
     @Test
     void shouldReturnCorrectForList () throws Exception {
-        when (library.getBooks(Mockito.any())).thenReturn(new PageImpl<>(BOOKS));
+        when (library.getBooks(Mockito.any())).thenReturn(new PageImpl<>(List.of(BOOK)));
         mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("book_list"))
-                .andExpect(model().attribute("books", BOOK_DTO))
+                .andExpect(model().attribute("books", List.of(BookDto.toDto(BOOK))))
         ;
     }
 
@@ -88,15 +87,13 @@ class BookControllerTest {
     @Test
     void shouldReturnCorrectForSave() throws Exception {
         when(library.updateBook(BOOK)).thenReturn(BOOK);
-        this.mockMvc.perform(post("/book")
-                        .content("{\"book\" : \"" + new ObjectMapper().writeValueAsString(BOOK_DTO) + "\"}")
-                        //.param("book", new ObjectMapper().writeValueAsString(BOOK_DTO))
+        this.mockMvc.perform(post("/book").content(new ObjectMapper().writeValueAsString(BookDto.toDto(BOOK)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(redirectedUrl("/books"))
                 .andExpect(view().name("redirect:/books"))
                 .andExpect(status().is3xxRedirection());
-        verify(library, times(1)).updateBook(BOOK);
+        verify(library, times(1)).updateBook(any(Book.class));
     }
 
 }

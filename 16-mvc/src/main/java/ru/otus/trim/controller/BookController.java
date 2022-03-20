@@ -56,7 +56,7 @@ public class BookController {
     }
 
     @PostMapping("/book")
-    public String saveBook(@ModelAttribute("book") BookDto book,
+    public String saveBook(@RequestBody BookDto book,
                              BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "book_edit";
