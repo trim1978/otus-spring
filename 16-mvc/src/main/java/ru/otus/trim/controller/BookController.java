@@ -79,5 +79,9 @@ public class BookController {
         library.updateBook(book.toDomainObject());
         return "redirect:/books";
     }
+    @GetMapping("/")
+    public String main() {
+        return "redirect:/books";
+    }
 
 }

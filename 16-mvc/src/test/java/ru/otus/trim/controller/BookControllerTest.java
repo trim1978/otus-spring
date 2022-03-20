@@ -1,40 +1,20 @@
 package ru.otus.trim.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.data.domain.Page;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import ru.otus.trim.model.Author;
-import ru.otus.trim.repository.AuthorRepository;
-import ru.otus.trim.repository.BookRepository;
-import ru.otus.trim.rest.AuthorRestController;
-import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.service.LibraryService;
-import ru.otus.trim.service.LibraryServiceImpl;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookController.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = {LibraryServiceImpl.class})
-//@RunWith(SpringRunner.class)
 class BookControllerTest {
 
     @Autowired
@@ -42,14 +22,15 @@ class BookControllerTest {
 
     @MockBean
     private LibraryService library;
-    @Autowired
-    private WebApplicationContext wac;
-    @Before
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-    }
+    //@Autowired
+    //private WebApplicationContext wac;
+    //@Before
+    //public void setup() {
+        //mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    //}
     @Test
     void should () throws Exception {
+        when (library.getBooks(Mockito.any())).thenReturn(Page.empty());
         mockMvc.perform(get("/books")).andDo(print()).andExpect(status().isOk());//.andExpect(view().name("books"));
     }
 
