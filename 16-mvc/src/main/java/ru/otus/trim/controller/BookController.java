@@ -4,26 +4,22 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Genre;
-import ru.otus.trim.repository.AuthorRepository;
-import ru.otus.trim.repository.BookRepository;
-import ru.otus.trim.repository.GenreRepository;
 import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.rest.dto.BookDto;
 import ru.otus.trim.rest.dto.GenreDto;
+import ru.otus.trim.rest.exceptions.NotFoundException;
 import ru.otus.trim.service.LibraryService;
 
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -44,20 +40,9 @@ public class BookController {
         return "book_list";
     }
 
-    @GetMapping("/books_generate")
-    public String generateBooks(@RequestParam("count") int count) {
-        List<Genre> genres = library.getGenres();
-        List<Author> authors = library.getAuthors();
-        for (int i=0; i<count; i++) {
-            library.addBook(UUID.randomUUID().toString(), authors.get((int)(authors.size()*Math.random())).getName(), genres.get((int)(genres.size()*Math.random())).getName());
-        }
-        return "redirect:/books";
-    }
-
-
     @GetMapping("/book")
-    public String getBook(@RequestParam("id") long id, Model model) {
-        model.addAttribute("book",id > 0 ? BookDto.toDto (library.getBookById(id)) : new BookDto (0, "", new AuthorDto (0, ""), new GenreDto (0, "")));
+    public String getBook(@RequestParam(name = "id", defaultValue = "0") long id, Model model) {
+        model.addAttribute("book",id > 0 ? BookDto.toDto (Optional.ofNullable(library.getBookById(id)).orElseThrow(NotFoundException :: new)) : new BookDto (0, "", new AuthorDto (0, ""), new GenreDto (0, "")));
 
         model.addAttribute("genres",library.getGenres().stream()
                 .map(GenreDto::toDto)
@@ -79,9 +64,25 @@ public class BookController {
         library.updateBook(book.toDomainObject());
         return "redirect:/books";
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFound(NotFoundException ex) {
+        return ResponseEntity.badRequest().body("Такой книги нет");
+    }
+
+    ///// сервисные
+
     @GetMapping("/")
     public String main() {
         return "redirect:/books";
     }
-
+    @GetMapping("/books_generate")
+    public String generateBooks(@RequestParam("count") int count) {
+        List<Genre> genres = library.getGenres();
+        List<Author> authors = library.getAuthors();
+        for (int i=0; i<count; i++) {
+            library.addBook(UUID.randomUUID().toString(), authors.get((int)(authors.size()*Math.random())).getName(), genres.get((int)(genres.size()*Math.random())).getName());
+        }
+        return "redirect:/books";
+    }
 }

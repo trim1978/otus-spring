@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
-import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.repository.BookRepository;
 import ru.otus.trim.repository.CommentRepository;
-import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.rest.dto.CommentDto;
 
 import java.util.stream.Collectors;
@@ -53,6 +51,13 @@ public class CommentController {
         model.addAttribute("book_author", comment.getBook().getAuthor().getName());
         model.addAttribute("comment", CommentDto.toDto (comment));
         return "comment_edit";
+    }
+
+    @GetMapping("/comment_remove")
+    public String removeCommentById(@RequestParam("id") long id, Model model) {
+        Comment comment = commentRepository.findById(id).orElseThrow();
+        commentRepository.deleteById(id);
+        return "redirect:/comments_book/?book="+comment.getBook().getId();
     }
 
     @GetMapping("/comment_add")

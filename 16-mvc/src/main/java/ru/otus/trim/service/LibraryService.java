@@ -15,7 +15,7 @@ public interface LibraryService {
     List<Book> getBooks ();
     Page<Book> getBooks (Pageable pageable);
     Book addBook (String title, String author, String genre);
-    void updateBook(Book book);
+    Book updateBook(Book book);
 
     Author getAuthor (String name);
     List<Author> getAuthors ();

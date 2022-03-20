@@ -60,10 +60,9 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional
     @Override
-    public void updateBook(Book book) {
-        //Book book = new Book(title, getAuthor(author), getGenre(genre));
-        books.save(book);
-        //return book;
+    public Book updateBook(Book book) {
+        books.saveAndFlush(book);
+        return book;
     }
 
     @Transactional

@@ -64,7 +64,9 @@
         <td th:text="${comment.datetime}">Datetime</td>
         <td th:text="${comment.text}">Text</td>
         <td>
-            <a th:href="@{/comment_edit/(id=${comment.id})}" href="comment_edit.html" th:text="#{edit-button-caption}">Edit</a>
+            <a th:href="@{/comment_edit/(id=${comment.id})}" href="comment_edit.html" th:text="#{edit-button-caption}">edit</a>
+            <span>|</span>
+            <a th:href="@{/comment_remove/(id=${comment.id})}" href="comment_list.html" th:text="#{del-button-caption}">del</a>
         </td>
     </tr>
     </tbody>
