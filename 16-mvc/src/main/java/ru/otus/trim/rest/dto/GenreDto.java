@@ -11,6 +11,8 @@ package ru.otus.trim.rest.dto;
 
 import ru.otus.trim.model.Genre;
 
+import java.util.Objects;
+
 /**
  * DTO that represents Genre
  */
@@ -26,6 +28,19 @@ public class GenreDto {
     public GenreDto(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GenreDto genreDto = (GenreDto) o;
+        return id == genreDto.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public int getId() {

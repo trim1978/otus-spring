@@ -14,6 +14,7 @@ import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
 
 import java.util.Date;
+import java.util.Objects;
 
 @NoArgsConstructor
 @ToString
@@ -36,6 +37,19 @@ public class CommentDto {
 
     public CommentDto(long book) {
         this.book = book;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommentDto that = (CommentDto) o;
+        return id == that.id && book == that.book;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, book);
     }
 
     public Comment toDomainObject(Book book) {
