@@ -19,6 +19,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @DisplayName("Сервис библиотеки должен")
 @SpringBootTest
@@ -64,11 +66,9 @@ class LibraryServiceTest {
     @DisplayName("удалять книгу по её id")
     @Test
     void shouldRemoveBookById() {
-        //given(comments.deleteByBookId(1L)).;
-        assertThat(library.getBookById(1)).isNotNull();
         library.removeBookById(1);
-        assertThat(library.getBookById(1)).isNull();
-        assertThat(library.getComments(1)).hasSize(0);
+        verify(comments, times(1)).deleteByBookId(1L);
+        verify(books, times(1)).deleteById(1L);
     }
 
     @DisplayName("добавлять книгу")
