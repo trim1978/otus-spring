@@ -10,9 +10,6 @@ import ru.otus.trim.model.Genre;
 import ru.otus.trim.service.LibraryOutService;
 import ru.otus.trim.service.LibraryService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @ShellComponent
 @RequiredArgsConstructor
 public class LibraryCommandComponent {

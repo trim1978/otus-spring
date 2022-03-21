@@ -22,7 +22,7 @@ public class Book {
     private String title;
 
     @Fetch(FetchMode.SUBSELECT)
-    @ManyToMany(targetEntity = Author.class, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.DETACH, targetEntity = Author.class, fetch = FetchType.LAZY)
     @JoinTable(name = "book_authors", joinColumns = @JoinColumn(name = "book"),
             inverseJoinColumns = @JoinColumn(name = "author"))
     //@ToString.Exclude
@@ -30,7 +30,7 @@ public class Book {
     private List<Author> authors;
 
     @Fetch(FetchMode.SUBSELECT)
-    @ManyToMany(targetEntity = Genre.class, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.DETACH, targetEntity = Genre.class, fetch = FetchType.LAZY)
     @JoinTable(name = "book_genres",
             joinColumns = @JoinColumn(name = "book"),
             inverseJoinColumns = @JoinColumn(name = "genre"))
@@ -38,14 +38,8 @@ public class Book {
     @EqualsAndHashCode.Exclude
     private List<Genre> genres;
 
-    @OneToMany(targetEntity = Comment.class, mappedBy = "book", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<Comment> comments;
-
     public Book(String title, Author author, Genre genre) {
-        this (0, title, List.of(author), List.of(genre), List.of());
+        this (0, title, List.of(author), List.of(genre));
     }
 
 }
