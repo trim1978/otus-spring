@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
+import ru.otus.trim.model.Comment;
 import ru.otus.trim.model.Genre;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("Репозиторий Book должен")
 @DataJpaTest
 @Import(LibraryServiceImpl.class)
-class LibraryServiceTest {
+class LibraryServiceImplTest {
 
     @Autowired
     private LibraryServiceImpl library;
@@ -56,4 +57,45 @@ class LibraryServiceTest {
             .matches(t -> t.getAuthors().contains(author));
         assertThat(book).isIn(library.getBooks());
     }
+
+    //////////////////////////////////////////////////////////////////
+
+    @DisplayName("возвращать список всех комментариев к книгам")
+    @Test
+    void shouldFindAllComments() {
+        assertThat(library.getComments(1)).hasSize(2);
+        assertThat(library.getComments(2)).hasSize(4);
+    }
+
+    @DisplayName("добавлять комментарий к книге")
+    @Test
+    void shouldAddComment() {
+        Comment comment = library.addComment(1, "comment");
+        assertThat(comment).matches(t -> t.getText().equalsIgnoreCase("comment"))
+                .matches(t -> t.getDatetime().getTime() > 0L)
+                .matches(t -> t.getId() > 0);
+        assertThat(comment).isIn(library.getComments(1));
+    }
+
+    @DisplayName("корректировать комментарий к книге")
+    @Test
+    void shouldSetComment() {
+        Comment comment = library.addComment(1, "comment");
+        comment = library.changeComment(comment.getId(),"changed");
+        assertThat(comment).matches(t -> t.getText().equalsIgnoreCase("changed"))
+                .matches(t -> t.getDatetime().getTime() > 0L)
+                .matches(t -> t.getId() > 0);
+        assertThat(comment).isIn(library.getComments(1));
+        //assertThat(library.changeComment(100,"changed")).isNull();
+    }
+
+    @DisplayName("удалять комментарий к книге")
+    @Test
+    void shouldDelComment() {
+        Comment comment = library.addComment(1, "comment");
+        assertThat(comment).isIn(library.getComments(1));
+        library.removeComment(comment.getId());
+        assertThat(comment).isNotIn(library.getComments(1));
+    }
+
 }

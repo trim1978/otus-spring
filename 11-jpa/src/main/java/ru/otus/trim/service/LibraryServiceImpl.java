@@ -91,7 +91,6 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     @Override
     public Comment changeComment(long commentID, String text) {
-        //comments.updateTextById(commentID, text);
         Comment comment = comments.findById(commentID).orElse(null);
         if (comment != null){
             comment.setText(text);
