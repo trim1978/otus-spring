@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DisplayName("Репозиторий Book должен")
+@DisplayName("Сервис библиотеки должен")
 @DataJpaTest
 @Import(LibraryServiceImpl.class)
 class LibraryServiceImplTest {

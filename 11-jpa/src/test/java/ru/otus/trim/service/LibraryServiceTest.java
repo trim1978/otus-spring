@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Genre;
@@ -15,13 +14,15 @@ import ru.otus.trim.repository.CommentRepository;
 import ru.otus.trim.repository.GenreRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@DisplayName("Репозиторий Book должен")
+@DisplayName("Сервис библиотеки должен")
 @SpringBootTest
-class LibraryBookTest {
+class LibraryServiceTest {
 
     @Autowired
     private LibraryServiceImpl library;
@@ -47,14 +48,23 @@ class LibraryBookTest {
     @DisplayName("возвращать книгу по её id")
     @Test
     void shouldFindBookById() {
+        Book book_ = new Book();
+        given(books.findById(1L)).willReturn(Optional.of(book_));
         Book book = library.getBookById(1);
-        assertThat(book)
-                .hasFieldOrPropertyWithValue("title", "Metel");
+        assertThat(book).isNotNull().isEqualTo(book_);
+    }
+
+    @DisplayName("выдавать ошибку на запрос книгу по неверному id")
+    @Test
+    void shouldNotFindBookById() {
+        Book book = library.getBookById(1);
+        assertThat(book).isNull();
     }
 
     @DisplayName("удалять книгу по её id")
     @Test
     void shouldRemoveBookById() {
+        //given(comments.deleteByBookId(1L)).;
         assertThat(library.getBookById(1)).isNotNull();
         library.removeBookById(1);
         assertThat(library.getBookById(1)).isNull();
@@ -64,13 +74,13 @@ class LibraryBookTest {
     @DisplayName("добавлять книгу")
     @Test
     void shouldAddBookById() {
-        Book book = library.addBook("Na dne", "Gorky", "drama");
-        Genre genre = library.getGenre("drama");
-        Author author = library.getAuthor("Gorky");
-        assertThat(book).matches(t -> t.getTitle().equalsIgnoreCase("Na dne"))
-                .matches(t -> t.getGenres().contains(genre))
-                .matches(t -> t.getId() > 0)
-            .matches(t -> t.getAuthors().contains(author));
-        assertThat(book).isIn(library.getBooks());
+        Author author = new Author ();
+        Genre genre = new Genre ();
+        Book book_ = new Book("", author, genre);
+        given(authors.findByName(any())).willReturn(Optional.of(author));
+        given(genres.findByName(any())).willReturn(Optional.of(genre));
+        given(books.save(any())).willReturn(book_);
+        Book book = library.addBook("", author.getName(), genre.getName());
+        assertThat(book).isEqualTo(book_);
     }
 }
