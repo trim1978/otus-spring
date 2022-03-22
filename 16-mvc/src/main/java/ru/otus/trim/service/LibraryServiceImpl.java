@@ -28,7 +28,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     @Override
     public void removeBookById(long bookID) {
-        comments.deleteById(bookID);
+        comments.deleteByBookId(bookID);
         books.deleteById(bookID);
     }
 

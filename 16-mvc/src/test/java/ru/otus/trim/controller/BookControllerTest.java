@@ -65,6 +65,16 @@ class BookControllerTest {
     }
 
     @Test
+    public void shouldDoCorrectForRemove() throws Exception {
+        when(library.getBookById(Mockito.anyLong())).thenReturn(BOOK);
+        this.mockMvc.perform(get("/book_remove").param("id", "1"))
+                .andExpect(redirectedUrl("/books"))
+                .andExpect(view().name("redirect:/books"))
+                .andExpect(status().is3xxRedirection());
+
+    }
+
+    @Test
     public void shouldReturnCorrectForAdd() throws Exception {
         when(library.getAuthors()).thenReturn(List.of(AUTHOR));
         when(library.getGenres()).thenReturn(List.of(GENRE));

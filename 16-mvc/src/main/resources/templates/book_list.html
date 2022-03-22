@@ -55,7 +55,7 @@
         <th>Title</th>
         <th>Author</th>
         <th>Genre</th>
-        <th>Action</th>
+        <th>Actions</th>
         <th>Comments</th>
     </tr>
     </thead>
@@ -68,7 +68,9 @@
         </td>
         <td th:text="${book.genre.name}">Genre</td>
         <td>
-            <a th:href="@{/book/(id=${book.id})}" href="book_edit.html" th:text="#{edit-button-caption}">Edit</a>
+            <a th:href="@{/book/(id=${book.id})}" href="book_edit.html" th:text="#{edit-button-caption}">edit</a>
+            <span>|</span>
+            <a th:href="@{/book_remove/(id=${book.id})}" href="book_list.html" th:text="#{del-button-caption}">del</a>
         </td>
         <td>
             <a th:href="@{/comments_book/(book=${book.id})}" href="comment_list.html">View</a>

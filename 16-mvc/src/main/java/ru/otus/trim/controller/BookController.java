@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
+import ru.otus.trim.model.Comment;
 import ru.otus.trim.model.Genre;
 import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.rest.dto.BookDto;
@@ -70,12 +71,20 @@ public class BookController {
         return ResponseEntity.badRequest().body("Такой книги нет");
     }
 
+    @GetMapping("/book_remove")
+    public String removeBookById(@RequestParam("id") long id, Model model) {
+        Book book = Optional.ofNullable(library.getBookById(id)).orElseThrow(NotFoundException :: new);
+        library.removeBookById(id);
+        return "redirect:/books";
+    }
+
     ///// сервисные
 
     @GetMapping("/")
     public String main() {
         return "redirect:/books";
     }
+
     @GetMapping("/books_generate")
     public String generateBooks(@RequestParam("count") int count) {
         List<Genre> genres = library.getGenres();

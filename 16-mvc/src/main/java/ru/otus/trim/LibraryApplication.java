@@ -6,9 +6,9 @@ import org.springframework.data.map.repository.config.EnableMapRepositories;
 
 @EnableMapRepositories
 @SpringBootApplication
-public class MainShell {
+public class LibraryApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MainShell.class);
+        SpringApplication.run(LibraryApplication.class);
     }
 }
