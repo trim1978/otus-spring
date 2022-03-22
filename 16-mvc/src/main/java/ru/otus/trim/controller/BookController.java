@@ -57,12 +57,17 @@ public class BookController {
     }
 
     @PostMapping("/book")
-    public String saveBook(@RequestBody BookDto book,
-                             BindingResult bindingResult, Model model) {
+    public String saveBook(@ModelAttribute("book") BookDto book,
+                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "book_edit";
         }
-        library.updateBook(book.toDomainObject());
+        if (book.getId() == 0){
+            library.addBook(book.getTitle(), library.getAuthor(book.getAuthor().getId()).getName(), library.getGenre(book.getGenre().getId()).getName());
+        }
+        else {
+            library.updateBook(book.toDomainObject());
+        }
         return "redirect:/books";
     }
 
@@ -71,8 +76,8 @@ public class BookController {
         return ResponseEntity.badRequest().body("Такой книги нет");
     }
 
-    @GetMapping("/book_remove")
-    public String removeBookById(@RequestParam("id") long id, Model model) {
+    @DeleteMapping("/book_remove")
+    public String removeBookById(@RequestParam("id") Long id) {
         Book book = Optional.ofNullable(library.getBookById(id)).orElseThrow(NotFoundException :: new);
         library.removeBookById(id);
         return "redirect:/books";

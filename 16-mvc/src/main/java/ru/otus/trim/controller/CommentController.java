@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
 import ru.otus.trim.repository.BookRepository;
@@ -53,11 +50,12 @@ public class CommentController {
         return "comment_edit";
     }
 
-    @GetMapping("/comment_remove")
-    public String removeCommentById(@RequestParam("id") long id, Model model) {
+    @DeleteMapping("/comment_remove")
+    public String removeCommentById(@RequestParam(value = "id") long id) {
         Comment comment = commentRepository.findById(id).orElseThrow();
+        long book = comment.getBook().getId();
         commentRepository.deleteById(id);
-        return "redirect:/comments_book/?book="+comment.getBook().getId();
+        return "redirect:/comments_book/?book="+book;
     }
 
     @GetMapping("/comment_add")
