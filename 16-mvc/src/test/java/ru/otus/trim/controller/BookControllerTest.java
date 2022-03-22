@@ -26,6 +26,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
 @WebMvcTest(BookController.class)
 class BookControllerTest {
@@ -67,7 +68,7 @@ class BookControllerTest {
     @Test
     public void shouldDoCorrectForRemove() throws Exception {
         when(library.getBookById(Mockito.anyLong())).thenReturn(BOOK);
-        this.mockMvc.perform(get("/book_remove").param("id", "1"))
+        this.mockMvc.perform(delete("/book_remove").param("id", "1"))
                 .andExpect(redirectedUrl("/books"))
                 .andExpect(view().name("redirect:/books"))
                 .andExpect(status().is3xxRedirection());
@@ -97,9 +98,10 @@ class BookControllerTest {
     @Test
     void shouldReturnCorrectForSave() throws Exception {
         when(library.updateBook(BOOK)).thenReturn(BOOK);
-        this.mockMvc.perform(post("/book").content(new ObjectMapper().writeValueAsString(BookDto.toDto(BOOK)))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(post("/book")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .flashAttr("book", BookDto.toDto(BOOK)))
                 .andExpect(redirectedUrl("/books"))
                 .andExpect(view().name("redirect:/books"))
                 .andExpect(status().is3xxRedirection());

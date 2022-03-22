@@ -72,11 +72,21 @@ public class LibraryServiceImpl implements LibraryService {
         return author.orElseGet(() -> authors.save(new Author(name)));
     }
 
+    @Override
+    public Author getAuthor(int id) {
+        return authors.getById(id);
+    }
+
     @Transactional
     @Override
     public Genre getGenre(String name) {
         Optional<Genre> genre = genres.findByName(name);
         return genre.orElseGet(() -> genres.save(new Genre(name)));
+    }
+
+    @Override
+    public Genre getGenre(int id) {
+        return genres.getById(id);
     }
 
     @Transactional(readOnly = true)
