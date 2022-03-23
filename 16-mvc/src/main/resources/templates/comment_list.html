@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
 <head>
     <meta charset="UTF-8"/>
     <title>List of comments</title>
@@ -30,6 +31,7 @@
             padding-left: 30px;
         }
 
+
     </style>
 
     <style type="text/css" th:inline="text">
@@ -40,14 +42,18 @@
             padding-left: 30px;
         }
 
+
     </style>
 </head>
 <body>
 
 <h3 th:text="#{comments-table-header}">Comments:</h3><br>
-<h>Title: "[[*{title}]]"</h><br>
-<h>Author: [[*{author}]]</h><br>
-<h>Genre: [[*{genre}]]</h><br>
+<h>Title: "[[*{title}]]"</h>
+<br>
+<h>Author: [[*{author}]]</h>
+<br>
+<h>Genre: [[*{genre}]]</h>
+<br>
 
 <table class="comments">
     <thead>
@@ -66,7 +72,10 @@
         <td>
             <a th:href="@{/comment_edit/(id=${comment.id})}" href="comment_edit.html" th:text="#{edit-button-caption}">edit</a>
             <span>|</span>
-            <a th:href="@{/comment_remove/(id=${comment.id})}" href="comment_list.html" th:text="#{del-button-caption}">del</a>
+            <form th:object="${comment}" th:action="@{/comment_remove/(id=${comment.id})}" th:method="delete">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit">del</button>
+            </form>
         </td>
     </tr>
     </tbody>

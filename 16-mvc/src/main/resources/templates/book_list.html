@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
 <head>
     <meta charset="UTF-8"/>
     <title>List of books</title>
@@ -30,6 +31,7 @@
             padding-left: 30px;
         }
 
+
     </style>
 
     <style type="text/css" th:inline="text">
@@ -39,6 +41,7 @@
             padding: 2px;
             padding-left: 30px;
         }
+
 
     </style>
 </head>
@@ -64,13 +67,20 @@
         <td th:text="${book.id}">1</td>
         <td th:text="${book.title}">Working title</td>
         <td>
-            <a th:href="@{/author/(id=${book.author.id})}" href="author_edit.html" th:text="${book.author.name}">Author</a>
+            <a th:href="@{/author/(id=${book.author.id})}" href="author_edit.html"
+               th:text="${book.author.name}">Author</a>
         </td>
         <td th:text="${book.genre.name}">Genre</td>
         <td>
             <a th:href="@{/book/(id=${book.id})}" href="book_edit.html" th:text="#{edit-button-caption}">edit</a>
             <span>|</span>
-            <a th:href="@{/book_remove/(id=${book.id})}" href="book_list.html" th:text="#{del-button-caption}">del</a>
+            <!--a th:href="@{/book_remove/(id=${book.id})}" href="book_list.html" th:text="#{del-button-caption}">del</a-->
+            <form th:object="${book}" th:action="@{/book_remove/(id=${book.id})}" th:method="delete">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit">del</button>
+            </form>
+
+
         </td>
         <td>
             <a th:href="@{/comments_book/(book=${book.id})}" href="comment_list.html">View</a>
