@@ -10,6 +10,9 @@ import ru.otus.trim.model.Genre;
 import ru.otus.trim.service.LibraryOutService;
 import ru.otus.trim.service.LibraryService;
 
+import java.util.List;
+import java.util.UUID;
+
 @ShellComponent
 @RequiredArgsConstructor
 public class LibraryCommandComponent {
@@ -96,6 +99,16 @@ public class LibraryCommandComponent {
     public String changeComment(long commentID, String text) {
         Comment comment = library.changeComment(commentID, text);
         return out.getCommentString(comment);
+    }
+
+    @ShellMethod(value = "Generate books", key = {"generate","gen"})
+    public String generateBooks(int count) {
+        List<Genre> genres = library.getGenres();
+        List<Author> authors = library.getAuthors();
+        for (int i=0; i<count; i++) {
+            library.addBook(UUID.randomUUID().toString(), authors.get((int)(authors.size()*Math.random())).getName(), genres.get((int)(genres.size()*Math.random())).getName());
+        }
+        return "added " + count + " books";
     }
 
 }

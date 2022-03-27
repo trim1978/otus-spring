@@ -4,14 +4,10 @@ import lombok.val;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 import ru.otus.trim.model.Book;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,8 +62,6 @@ class LibraryNplusOneTest {
         assertThat(comments).isNotNull().hasSize(4)
                 .allMatch(s -> !s.getText().equals(""))
                 .allMatch(s -> s.getBook() != null && s.getBook().getTitle() != null);
-                //.allMatch(s -> s.getBook().getAuthors().size() > 0)
-                //.allMatch(s -> s.getBook().getGenres().size() > 0);
         System.out.println("----------------------------------------------------------------------------------------------------------\n\n\n\n");
         assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(2);
     }
