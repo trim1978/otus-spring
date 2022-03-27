@@ -70,6 +70,6 @@ class LibraryNplusOneTest {
         //.allMatch(s -> s.getEmails() != null && s.getEmails().size() > 0)
         ;
         System.out.println("----------------------------------------------------------------------------------------------------------\n\n\n\n");
-        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(3);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(2);
     }
 }

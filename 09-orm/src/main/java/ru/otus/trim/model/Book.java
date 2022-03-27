@@ -24,14 +24,14 @@ public class Book {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
     @JoinColumn(name = "author")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Author author;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
     @JoinColumn(name = "genre")
     @ToString.Exclude

@@ -7,10 +7,7 @@ import ru.otus.trim.model.Comment;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
+import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
 
@@ -55,14 +52,8 @@ public class CommentRepositoryJpa implements CommentRepository{
 
     @Override
     public List<Comment> getAllComments(long bookId){
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Comment> q = cb.createQuery(Comment.class);
-        Root<Comment> c = q.from(Comment.class);
-        q.select(c);
-        ParameterExpression<Long> p1 = cb.parameter(Long.class);
-        q.where(
-                cb.equal(c.get("book"), bookId)
-        );
-        return em.createQuery(q).getResultList();
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c join fetch c.book where c.book.id = :id", Comment.class);
+        query.setParameter("id", bookId);
+        return query.getResultList();
     }
 }

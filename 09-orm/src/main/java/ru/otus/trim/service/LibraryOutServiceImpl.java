@@ -22,6 +22,6 @@ public class LibraryOutServiceImpl implements LibraryOutService {
 
     @Override
     public String getCommentString(Comment comment) {
-        return String.format ("C: id=%d '%s' %s",comment.getId(), comment.getText(), comment.getDatetime());
+        return String.format ("C: id=%d '%s' %s -> B: id=%d -> '%s'",comment.getId(), comment.getText(), comment.getDatetime(), comment.getBook().getId(), comment.getBook().getTitle());
     }
 }

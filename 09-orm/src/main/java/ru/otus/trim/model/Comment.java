@@ -24,12 +24,10 @@ public class Comment {
     private String text;
 
     // При загрузке комментариев не так важно получить данные о самой книге, поэтому подойдет и такой способ
-    @Fetch(FetchMode.SELECT)
-    // Указывает на связь между таблицами "один к одному"
-    @OneToOne(cascade = CascadeType.ALL, targetEntity = Book.class, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Book.class, fetch = FetchType.LAZY)
     // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
     @JoinColumn(name = "book")
-    //@JoinTable(name = "books",joinColumns = @JoinColumn(name = "student_id"),inverseJoinColumns = @JoinColumn(name = "course_id"))
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Book book;

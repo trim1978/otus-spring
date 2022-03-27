@@ -12,21 +12,20 @@ import java.util.*;
 public class BookRepositoryJpa implements BookRepository {
 
     @PersistenceContext
-    private final EntityManager em;
+    private final EntityManager entityManager;
 
     @Override
     public Optional<Book> findById (long bookID) {
-        EntityGraph<?> entityGraph = em.getEntityGraph("author-genre-entity-graph");
-        TypedQuery<Book> query = em.createQuery("select b from Book b where b.id=:id", Book.class);
-        query.setParameter("id", bookID);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
-        return Optional.ofNullable(query.getResultList().size() == 1 ? query.getSingleResult() : null);
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("author-genre-entity-graph");
+        Map<String, Object> properties = Map.of ("javax.persistence.fetchgraph", entityGraph);
+        Book book = entityManager.find(Book.class, bookID, properties);
+        return Optional.ofNullable(book);
     }
 
     @Override
     public List<Book> findAll() {
-        EntityGraph<?> entityGraph = em.getEntityGraph("author-genre-entity-graph");
-        TypedQuery<Book> query = em.createQuery("select b from Book b", Book.class);
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("author-genre-entity-graph");
+        TypedQuery<Book> query = entityManager.createQuery("select b from Book b", Book.class);
         query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
@@ -34,16 +33,16 @@ public class BookRepositoryJpa implements BookRepository {
     @Override
     public Book save(Book book) {
         if (book.getId() <= 0) {
-            em.persist(book);
+            entityManager.persist(book);
             return book;
         } else {
-            return em.merge(book);
+            return entityManager.merge(book);
         }
     }
 
     @Override
     public void deleteById(long bookID) {
-        Query query = em.createQuery("delete from Book b where b.id = :id");
+        Query query = entityManager.createQuery("delete from Book b where b.id = :id");
         query.setParameter("id", bookID);
         query.executeUpdate();
     }
