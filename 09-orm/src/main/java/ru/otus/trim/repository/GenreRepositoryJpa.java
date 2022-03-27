@@ -20,8 +20,6 @@ public class GenreRepositoryJpa implements GenreRepository {
 
     @Override
     public Optional<Genre> getGenreById(int id) {
-        //TypedQuery<Genre> query = em.createQuery("select a from genres a where id="+id, Genre.class);
-        //return query.getSingleResult();
         return Optional.ofNullable(em.find(Genre.class, id));
     }
     @Override

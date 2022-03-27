@@ -30,9 +30,16 @@ public class CommentRepositoryJpa implements CommentRepository{
         }
     }
     @Override
-    public void remove (long commentID){
+    public void deleteById(long commentID){
         Query query = em.createQuery("delete from Comment c where c.id = :id");
         query.setParameter("id", commentID);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteByBookId(long bookID) {
+        Query query = em.createQuery("delete from Comment c where c.book.id = :id");
+        query.setParameter("id", bookID);
         query.executeUpdate();
     }
 
@@ -57,12 +64,5 @@ public class CommentRepositoryJpa implements CommentRepository{
                 cb.equal(c.get("book"), bookId)
         );
         return em.createQuery(q).getResultList();
-    }
-
-    @Override
-    public void removeComments(long bookId) {
-        Query query = em.createQuery("delete from Comment c where c.book.id = :book");
-        query.setParameter("book", bookId);
-        query.executeUpdate();
     }
 }

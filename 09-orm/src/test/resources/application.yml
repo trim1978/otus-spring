@@ -12,6 +12,9 @@ spring:
 
     show-sql: true
 
+  shell:
+    interactive:
+      enabled: false
 
 
     properties:

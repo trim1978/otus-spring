@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface CommentRepository {
     void add(Comment comment);
-    void remove (long commentID);
+    void deleteById(long commentID);
+    void deleteByBookId(long bookID);
     Comment update (long commentID, String text);
     List<Comment> getAllComments(long bookId);
-    void removeComments(long bookId);
 }

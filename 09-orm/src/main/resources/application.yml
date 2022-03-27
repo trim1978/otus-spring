@@ -23,9 +23,6 @@ spring:
       ddl-auto: none
     show-sql: true
 
-  main:
-    allow-circular-references: true
-
 #    properties:
 #      hibernate:
 #        format_sql: true

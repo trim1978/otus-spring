@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.2</version>
+		<version>2.4.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.otus.trim</groupId>
-	<artifactId>spring-jdbc-exersise</artifactId>
+	<artifactId>spring-orm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-jdbc-exersise</name>
+	<name>spring-orm</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>

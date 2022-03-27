@@ -26,27 +26,27 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     @Override
     public void removeBookById(long bookID) {
-        comments.removeComments(bookID);
-        books.deleteBookById(bookID);
+        comments.deleteByBookId(bookID);
+        books.deleteById(bookID);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Book getBookById(long bookID) {
-        return books.getBookById(bookID);
+        return books.findById(bookID).orElse(null);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Book> getBooks() {
-        return books.getAllBooks();
+        return books.findAll();
     }
 
     @Transactional
     @Override
     public Book addBook(String title, String author, String genre) {
         Book book = new Book(0L, title, getAuthor(author), getGenre(genre));
-        books.save(book);
+        book = books.save(book);
         return book;
     }
 
@@ -79,13 +79,10 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     @Override
     public Comment addComment(long bookID, String text) {
-        Book book = books.getBookById(bookID);
-        if (book != null) {
-            Comment comment = new Comment(text, book);
-            comments.add(comment);
-            return comment;
-        }
-        return null;
+        Book book = books.findById(bookID).orElseThrow();
+        Comment comment = new Comment(text, book);
+        comments.add(comment);
+        return comment;
     }
 
     @Override
@@ -97,7 +94,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public void removeComment(long commentID) {
         //Comment comment = new Comment(commentID, "", null);
-        comments.remove(commentID);
+        comments.deleteById(commentID);
     }
 
     @Transactional(readOnly = true)

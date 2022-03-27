@@ -1,6 +1,8 @@
 package ru.otus.trim.model;
 
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,16 +24,14 @@ public class Book {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    // Указывает на связь между таблицами "один к одному"
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(cascade = CascadeType.ALL)
     // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
     @JoinColumn(name = "author")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Author author;
 
-    // Указывает на связь между таблицами "один к одному"
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(cascade = CascadeType.ALL)
     // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
     @JoinColumn(name = "genre")
     @ToString.Exclude
