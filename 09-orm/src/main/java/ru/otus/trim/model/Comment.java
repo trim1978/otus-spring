@@ -23,10 +23,8 @@ public class Comment {
     @Column(name = "text", nullable = false)
     private String text;
 
-    // При загрузке комментариев не так важно получить данные о самой книге, поэтому подойдет и такой способ
     @Fetch(FetchMode.JOIN)
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = Book.class, fetch = FetchType.LAZY)
-    // Задает поле, по которому происходит объединение с таблицей для хранения связанной сущности
     @JoinColumn(name = "book")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
