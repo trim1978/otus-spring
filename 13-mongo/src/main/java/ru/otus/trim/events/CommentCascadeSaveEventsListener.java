@@ -7,6 +7,8 @@ import ru.otus.trim.model.Comment;
 import ru.otus.trim.repository.BookRepository;
 import ru.otus.trim.service.SequenceGeneratorService;
 
+import java.util.Date;
+
 @Component
 public class CommentCascadeSaveEventsListener extends AbstractMongoEventListener<Comment> {
     private final BookRepository bookRepository;
@@ -22,7 +24,7 @@ public class CommentCascadeSaveEventsListener extends AbstractMongoEventListener
         //System.out.println(" BEFORE " + event);
         Comment comment = event.getSource();
         if (comment.getId() < 1) {
-            comment.setTime(System.currentTimeMillis());
+            comment.setTime(new Date());
             comment.setId(sequenceGeneratorService.generateLongSequence(Comment.SEQUENCE_NAME));
         }
         super.onBeforeConvert(event);

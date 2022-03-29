@@ -88,7 +88,7 @@ class LibraryServiceTests {
     @DisplayName("update")
     @Test
     void updateTest() {
-        Book book = new Book(0, TITLE_1, new Author(0, AUTHOR_PUSHKIN), List.of("horror"));
+        Book book = new Book(0, TITLE_1, new Author(AUTHOR_PUSHKIN), List.of("horror"));
         library.setBook(book);
         LinkedList<String> l = new LinkedList<> (book.getGenres());
         l.add("lyrics");
@@ -100,7 +100,7 @@ class LibraryServiceTests {
     @DisplayName("insert")
     @Test
     void insertTest() {
-        Book book = new Book(TITLE_2, AUTHOR_PUSHKIN, "lyrics");
+        Book book = new Book(TITLE_2, new Author(AUTHOR_PUSHKIN), "lyrics");
         library.setBook(book);
         verify(bookRepository, times(1)).save(book);
     }

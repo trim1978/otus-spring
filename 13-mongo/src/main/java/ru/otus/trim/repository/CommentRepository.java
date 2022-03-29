@@ -1,6 +1,5 @@
 package ru.otus.trim.repository;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
