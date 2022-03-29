@@ -63,7 +63,19 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional(readOnly = true)
     @Override
     public Author getAuthor(String name) {
-        return authors.findByName(name);
+        Author author = authors.findByName(name);
+        if (author == null){
+            author = authors.save(new Author(name));
+        }
+        return author;
+    }
+
+    @Transactional
+    @Override
+    public Book addBook(String title, String author, String genre) {
+        Book book = new Book(title, getAuthor(author), genre);
+        book = books.save(book);
+        return book;
     }
 
     @Transactional
@@ -85,6 +97,33 @@ public class LibraryServiceImpl implements LibraryService {
             return books.findByAuthor(author);
         }
         return List.of();
+    }
+
+    @Transactional()
+    @Override
+    public Comment addComment(long bookId, String text) {
+        Comment comment = new Comment(books.findById(bookId).orElseThrow(), text);
+        return comments.save(comment);
+    }
+
+    @Transactional()
+    @Override
+    public Comment changeComment(long commentID, String text) {
+        Comment comment = comments.findById(commentID).orElseThrow();
+        comment.setText(text);
+        return comments.save(comment);
+    }
+
+    @Transactional()
+    @Override
+    public void removeComment(long commentID) {
+        comments.deleteById(commentID);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Comment> getComments(long bookId) {
+        return comments.findByBook(books.findById(bookId).orElseThrow());
     }
 
     @Transactional(readOnly = true)
@@ -112,15 +151,6 @@ public class LibraryServiceImpl implements LibraryService {
             return comments.findByBook(book);
         }
         return List.of();
-    }
-
-    @Transactional()
-    @Override
-    public void addCommentToBookById(long bookID, String text) {
-        Book book = getBookById(bookID);
-        if (book != null) {
-            comments.save(new Comment(book, text));
-        } else throw new RuntimeException("book " + bookID + " not found");
     }
 
     @Transactional(readOnly = true)

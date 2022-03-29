@@ -21,13 +21,13 @@ public class Comment {
 
     @Id // Позволяет указать какое поле является идентификатором
     private long id;
-    private Date time;
+    private Date datetime;
     @DBRef
     private Book book;
     private String text;
 
     public Comment(Book book, String text) {
-        this.time = new Date ();
+        this.datetime = new Date ();
         this.book = book;
         this.text = text;
     }

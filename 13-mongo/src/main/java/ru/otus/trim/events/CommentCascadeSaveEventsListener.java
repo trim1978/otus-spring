@@ -24,7 +24,7 @@ public class CommentCascadeSaveEventsListener extends AbstractMongoEventListener
         //System.out.println(" BEFORE " + event);
         Comment comment = event.getSource();
         if (comment.getId() < 1) {
-            comment.setTime(new Date());
+            comment.setDatetime(new Date());
             comment.setId(sequenceGeneratorService.generateLongSequence(Comment.SEQUENCE_NAME));
         }
         super.onBeforeConvert(event);
