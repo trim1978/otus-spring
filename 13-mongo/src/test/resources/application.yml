@@ -1,29 +1,14 @@
 spring:
-  mongodb:
-    embedded:
-      version: 3.5.5
   data:
     mongodb:
-      port: 0
-      database: test
-      #host: localhost
-      #port: 27017
-      #database: awesomeMongo
-
+      database: libraryTest
   shell:    # отключение shell
     interactive:
       enabled: false
 
-
-mongock:
-  runner-type: "ApplicationRunner" # default
-  #runner-type: "InitializingBean"
-  enabled: false
-  mongo-db:
-    write-concern:
-      journal: false
-    read-concern: local
-
 logging:
   level:
-    root: ERROR
+    ROOT: info
+
+mongock:
+  enabled: false
