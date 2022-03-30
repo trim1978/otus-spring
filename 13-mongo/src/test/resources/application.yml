@@ -10,6 +10,9 @@ spring:
       #port: 27017
       #database: awesomeMongo
 
+  shell:    # отключение shell
+    interactive:
+      enabled: false
 
 
 mongock:

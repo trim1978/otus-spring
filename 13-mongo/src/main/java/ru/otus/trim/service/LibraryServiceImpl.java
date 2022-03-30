@@ -38,18 +38,18 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional
     @Override
-    public Book removeBookById(long bookID) {
+    public Book removeBookById(String bookID) {
         Book book = getBookById(bookID);
         if (book != null) {
+            comments.deleteByBook(book);
             books.delete(book);
-            for (Comment c : comments.findByBook(book)) comments.delete(c);
         }
         return book;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Book getBookById(long bookID) {
+    public Book getBookById(String bookID) {
         Optional<Book> opt = books.findById(bookID);
         return opt.orElse(null);
     }
@@ -83,7 +83,8 @@ public class LibraryServiceImpl implements LibraryService {
     public Author removeAuthor(String name) {
         Author author = authors.findByName(name);
         if (author != null){
-            for (Book book : books.findByAuthor (author)) removeBookById(book.getId ());
+            List<Book> removed = books.deleteByAuthor(author);
+            for (Book book : removed) comments.deleteByBook(book);
             authors.delete(author);
         }
         return author;
@@ -101,14 +102,14 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional()
     @Override
-    public Comment addComment(long bookId, String text) {
+    public Comment addComment(String bookId, String text) {
         Comment comment = new Comment(books.findById(bookId).orElseThrow(), text);
         return comments.save(comment);
     }
 
     @Transactional()
     @Override
-    public Comment changeComment(long commentID, String text) {
+    public Comment changeComment(String commentID, String text) {
         Comment comment = comments.findById(commentID).orElseThrow();
         comment.setText(text);
         return comments.save(comment);
@@ -116,13 +117,13 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional()
     @Override
-    public void removeComment(long commentID) {
+    public void removeComment(String commentID) {
         comments.deleteById(commentID);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Comment> getComments(long bookId) {
+    public List<Comment> getComments(String bookId) {
         return comments.findByBook(books.findById(bookId).orElseThrow());
     }
 
@@ -145,7 +146,7 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Comment> getCommentsByBookId(long bookID) {
+    public List<Comment> getCommentsByBookId(String bookID) {
         Book book = getBookById(bookID);
         if (book != null) {
             return comments.findByBook(book);

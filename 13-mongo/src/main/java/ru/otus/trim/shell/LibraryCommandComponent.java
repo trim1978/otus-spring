@@ -25,12 +25,12 @@ public class LibraryCommandComponent {
     }
 
     @ShellMethod(value = "Remove book", key = {"remove_book","rb","db"})
-    public void removeBook(long bookID) {
+    public void removeBook(String bookID) {
         library.removeBookById(bookID);
     }
 
     @ShellMethod(value = "Get book", key = {"get_book", "gb"})
-    public String getBook(long bookID) {
+    public String getBook(String bookID) {
         Book book = library.getBookById(bookID);
         if (book != null) {
             return out.getBookString(book);
@@ -74,7 +74,7 @@ public class LibraryCommandComponent {
     }
 
     @ShellMethod(value = "Get all comments", key = {"get_comments","gac"})
-    public StringBuilder getComments(long bookID) {
+    public StringBuilder getComments(String bookID) {
         StringBuilder l = new StringBuilder();
         for (Comment comment : library.getComments(bookID)){
             l.append(out.getCommentString(comment));
@@ -84,18 +84,24 @@ public class LibraryCommandComponent {
     }
 
     @ShellMethod(value = "Add comment", key = {"add_comment","ac"})
-    public String addComment(long bookID, String text) {
+    public String addComment(String bookID, String text) {
         return out.getCommentString(library.addComment(bookID, text));
     }
 
     @ShellMethod(value = "Remove comment", key = {"remove_comment","rc"})
-    public String removeComment(long commentID) {
+    public String removeComment(String commentID) {
         library.removeComment(commentID);
-        return String.format("Removed comment id = %d", commentID);
+        return String.format("Removed comment id = %s", commentID);
+    }
+
+    @ShellMethod(value = "Remove author", key = {"remove_author","ra"})
+    public String removeAuthor(String author) {
+        library.removeAuthor(author);
+        return String.format("Removed author '%s'", author);
     }
 
     @ShellMethod(value = "Change comment", key = {"change_comment","cc"})
-    public String changeComment(long commentID, String text) {
+    public String changeComment(String commentID, String text) {
         Comment comment = library.changeComment(commentID, text);
         return out.getCommentString(comment);
     }

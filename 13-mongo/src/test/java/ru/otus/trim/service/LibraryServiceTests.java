@@ -88,7 +88,7 @@ class LibraryServiceTests {
     @DisplayName("update")
     @Test
     void updateTest() {
-        Book book = new Book(0, TITLE_1, new Author(AUTHOR_PUSHKIN), List.of("horror"));
+        Book book = new Book(TITLE_1, new Author(AUTHOR_PUSHKIN), "horror");
         library.setBook(book);
         LinkedList<String> l = new LinkedList<> (book.getGenres());
         l.add("lyrics");

@@ -13,8 +13,8 @@ spring:
 
 
 mongock:
-  #runner-type: "ApplicationRunner" # default
-  runner-type: "InitializingBean"
+  runner-type: "ApplicationRunner" # default
+  #runner-type: "InitializingBean"
   change-logs-scan-package:
     - ru.otus.trim.changelog
   mongo-db:

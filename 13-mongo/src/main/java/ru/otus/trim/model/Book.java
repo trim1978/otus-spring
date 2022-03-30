@@ -19,7 +19,7 @@ public class Book {
     public static final String SEQUENCE_NAME = "books_sequence";
 
     @Id // Позволяет указать какое поле является идентификатором
-    private long id;
+    private String id;
     private String title;
     @DBRef
     private Author author;

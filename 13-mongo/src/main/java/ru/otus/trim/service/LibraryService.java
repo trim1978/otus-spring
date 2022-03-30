@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface LibraryService {
     void setBook (Book book);
-    Book removeBookById (long bookID);
-    Book getBookById (long bookID);
+    Book removeBookById (String bookId);
+    Book getBookById (String bookId);
     List<Book> getBooks ();
     Book addBook (String title, String author, String genre);
 
@@ -19,12 +19,12 @@ public interface LibraryService {
 
     List<String> getGenres ();
 
-    List<Comment> getCommentsByBookId (long bookID);
+    List<Comment> getCommentsByBookId (String bookID);
     List<Book> getBooksByGenre (String genre);
     List<Book> getBooksByAuthor (String author);
 
-    Comment addComment (long bookID, String text);
-    Comment changeComment (long commentID, String text);
-    void removeComment (long commentID);
-    List<Comment> getComments(long bookId);
+    Comment addComment (String bookId, String text);
+    Comment changeComment (String commentId, String text);
+    void removeComment (String commentId);
+    List<Comment> getComments(String bookId);
 }

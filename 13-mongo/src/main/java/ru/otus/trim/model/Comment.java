@@ -20,7 +20,7 @@ public class Comment {
     public static final String SEQUENCE_NAME = "comment_sequence";
 
     @Id // Позволяет указать какое поле является идентификатором
-    private long id;
+    private String id;
     private Date datetime;
     @DBRef
     private Book book;
