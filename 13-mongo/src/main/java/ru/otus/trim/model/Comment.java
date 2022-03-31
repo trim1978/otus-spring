@@ -16,9 +16,6 @@ import java.util.Date;
 @Document(collection = "comments")
 public class Comment {
 
-    @Transient
-    public static final String SEQUENCE_NAME = "comment_sequence";
-
     @Id // Позволяет указать какое поле является идентификатором
     private String id;
     private Date datetime;

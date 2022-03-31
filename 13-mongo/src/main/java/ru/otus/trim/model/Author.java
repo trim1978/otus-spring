@@ -16,8 +16,6 @@ public class Author {
     @Id
     private String id;
     private String name;
-    @Transient
-    public static final String SEQUENCE_NAME = "autors_sequence";
 
     public Author(String name) {
         this.name = name;

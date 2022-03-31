@@ -6,7 +6,7 @@ import ru.otus.trim.model.Book;
 
 import java.util.List;
 
-public interface BookRepository extends MongoRepository<Book, String> {
+public interface BookRepository extends MongoRepository<Book, String>, BookRepositoryCustom {
     List<Book> findByAuthor(Author author);
     List<Book> findByGenres(String genre);
     List<Book> deleteByAuthor(Author author);

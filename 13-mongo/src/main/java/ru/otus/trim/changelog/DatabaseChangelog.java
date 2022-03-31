@@ -42,8 +42,8 @@ public class DatabaseChangelog {
     public void initBooks(BookRepository repository){
         b1 = repository.save(new Book("Metel", a1, "drama"));
         b2 = repository.save(new Book("Fantazery", a3, "comedy"));
-        b3 = new Book("Borodino", a2, List.of("drama","lyrics"));
-        repository.save(new Book("Mciri", a2, List.of("drama","lyrics")));
+        b3 = new Book("Borodino", a2, "drama","lyrics");
+        repository.save(new Book("Mciri", a2, "drama","lyrics"));
     }
 
     @ChangeSet(order = "005", id = "insertComments", author = "stvort")

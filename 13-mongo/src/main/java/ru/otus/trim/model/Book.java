@@ -15,8 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Document(collection = "books")
 public class Book {
-    @Transient
-    public static final String SEQUENCE_NAME = "books_sequence";
 
     @Id // Позволяет указать какое поле является идентификатором
     private String id;
@@ -25,13 +23,9 @@ public class Book {
     private Author author;
     private List<String> genres;
 
-    public Book(String title, Author author, List<String> genres) {
-        this.title = title;
-        this.author = author;
-        this.genres = genres;
-    }
+    private List<Comment> comment;
 
-    public Book(String title, Author author, String genre) {
+    public Book(String title, Author author, String... genre) {
         this.title = title;
         this.author = author;
         this.genres = List.of(genre);
