@@ -19,7 +19,6 @@ public interface LibraryService {
 
     List<String> getGenres ();
 
-    List<Comment> getCommentsByBookId (String bookID);
     List<Book> getBooksByGenre (String genre);
     List<Book> getBooksByAuthor (String author);
 

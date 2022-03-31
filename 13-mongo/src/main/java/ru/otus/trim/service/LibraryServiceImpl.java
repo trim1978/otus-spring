@@ -124,7 +124,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional(readOnly = true)
     @Override
     public List<Comment> getComments(String bookId) {
-        return comments.findByBook(books.findById(bookId).orElseThrow());
+        return comments.findByBookId(bookId);
     }
 
     @Transactional(readOnly = true)
@@ -142,16 +142,6 @@ public class LibraryServiceImpl implements LibraryService {
             genres.addAll(book.getGenres());
         }
         return new ArrayList<>(genres);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Comment> getCommentsByBookId(String bookID) {
-        Book book = getBookById(bookID);
-        if (book != null) {
-            return comments.findByBook(book);
-        }
-        return List.of();
     }
 
     @Transactional(readOnly = true)

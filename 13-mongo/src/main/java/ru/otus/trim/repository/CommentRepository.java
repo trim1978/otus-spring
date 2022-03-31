@@ -7,7 +7,7 @@ import ru.otus.trim.model.Comment;
 import java.util.List;
 
 public interface CommentRepository extends MongoRepository<Comment, String> {
-    List<Comment> findByBook(Book book);
+    List<Comment> findByBookId(String bookId);
     void deleteByBook(Book book);
 
 }
