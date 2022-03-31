@@ -7,7 +7,7 @@ import ru.otus.trim.model.Comment;
 import java.util.List;
 
 public interface LibraryService {
-    void setBook (Book book);
+    Book changeBook(String bookId, String title, String author, List<String> genres);
     Book removeBookById (String bookId);
     Book getBookById (String bookId);
     List<Book> getBooks ();

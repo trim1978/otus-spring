@@ -3,9 +3,10 @@ package ru.otus.trim.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.repository.BookRepository;
@@ -20,9 +21,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DataMongoTest
 @DisplayName("Сервис библиотеки должен")
 @SpringBootTest
+@Import(LibraryServiceImpl.class)
 class LibraryServiceTest {
 
     @Autowired
@@ -42,6 +43,15 @@ class LibraryServiceTest {
         given(books.findAll()).willReturn(list);
         List<Book> books = library.getBooks();
         assertThat(books).hasSize(2).containsExactlyElementsOf(list);
+    }
+    @DisplayName("добавлять книгу")
+    @Test
+    void shouldAddBook() {
+        Book book_ = new Book();
+        given(books.save(any())).willReturn(book_);
+        given(authors.findByName(any ())).willReturn(new Author("2"));
+        Book book = library.addBook("1", "2", "3");
+        assertThat(book).isNotNull();
     }
 
     @DisplayName("возвращать книгу по её id")
@@ -63,8 +73,18 @@ class LibraryServiceTest {
     @DisplayName("удалять книгу по её id")
     @Test
     void shouldRemoveBookById() {
+        given(books.findById("1")).willReturn(Optional.of(new Book()));
         library.removeBookById("1");
         verify(comments, times(1)).deleteByBook(any());
-        verify(books, times(1)).deleteById(any());
+        verify(books, times(1)).delete(any());
+    }
+
+    @DisplayName("менять данные у книги по её id")
+    @Test
+    void shouldChangeBookById() {
+        given(books.findById("1")).willReturn(Optional.of(new Book()));
+        library.changeBook("1","1","1",List.of("1"));
+        verify(authors, times(1)).findByName(any());
+        verify(books, times(1)).save(any());
     }
 }

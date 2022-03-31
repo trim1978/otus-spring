@@ -32,8 +32,7 @@ class BookCRUDTests {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @Test
     void insertTest() {
-        Book book = new Book ("Metel", new Author("Pushkin"), "drama");
-        library.setBook(book);
+        Book book = library.addBook("Anchar", "Pushkin", "lyrics");
         assertThat(book.getId()).isNotNull();
         assertThat(book.getTitle()).isEqualTo("Metel");
         assertThat(book.getAuthor().getName()).isEqualTo("Pushkin");
@@ -44,8 +43,7 @@ class BookCRUDTests {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @Test
     void insertAuthorTest() {
-        Book book = new Book ("Metel", new Author("Pushkin"), "drama");
-        library.setBook(book);
+        Book book = library.addBook("Anchar", "Pushkin", "lyrics");
         assertThat(library.getAuthor("AUTHOR_PUSHKIN")).isNotNull();
     }
 
@@ -53,21 +51,19 @@ class BookCRUDTests {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @Test
     void updateTest() {
-        Book book = new Book ("Metel", new Author("Pushkin"), "drama");
-        library.setBook(book);
+        Book book = library.addBook("Anchar", "Pushkin", "lyrics");
         LinkedList<String> l = new LinkedList<> (book.getGenres());
-        l.add("lyric");
+        l.add("drama");
         book.setGenres(l);
-        library.setBook(book);
-        assertThat(library.getBookById(book.getId()).getGenres().contains("lyric"));
+        library.changeBook(book.getId(), "Mciri", "Lermontoc", l);
+        assertThat(library.getBookById(book.getId()).getGenres().contains("drama"));
     }
 
     @DisplayName("delete")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @Test
     void deleteTest() {
-        Book book = new Book ("Metel", new Author("Pushkin"), "drama");
-        library.setBook(book);
+        Book book = library.addBook("Anchar", "Pushkin", "lyrics");
         assertThat(library.getBookById(book.getId())).isNotNull();
         library.removeBookById(book.getId());
         assertThat(library.getBookById(book.getId())).isNull();

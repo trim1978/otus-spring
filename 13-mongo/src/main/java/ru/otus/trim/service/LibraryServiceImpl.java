@@ -25,15 +25,15 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional
     @Override
-    public void setBook(Book book) {
-        /*if (book.getId() > 0) {
-            Book book1 = getBookById(book.getId());
-            book1.setGenres(book.getGenres());
-            //authors.save(book.getAuthor());
-            book1.setAuthor(book.getAuthor());
-            books.save(book1);
+    public Book changeBook(String bookId, String title, String author, List<String> genres) {
+        Book book = getBookById(bookId);
+        if (book != null) {
+            book.setTitle(title);
+            book.setAuthor(getAuthor(author));
+            book.setGenres(genres);
+            return books.save(book);
         }
-        else */books.save(book);
+        return null;
     }
 
     @Transactional
