@@ -23,8 +23,6 @@ public class Book {
     private Author author;
     private List<String> genres;
 
-    private List<Comment> comment;
-
     public Book(String title, Author author, String... genre) {
         this.title = title;
         this.author = author;

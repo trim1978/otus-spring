@@ -24,7 +24,7 @@ public class BookRepositoryTest {
     private static Author author = new Author("author");
     private static Book book = new Book("1", "test",
             author,
-            List.of("drama"), List.of());
+            List.of("drama"));
 
     @Autowired
     private BookRepository repository;
