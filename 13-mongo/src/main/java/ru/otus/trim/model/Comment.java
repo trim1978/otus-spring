@@ -13,13 +13,16 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "comments")
+//@Document
 public class Comment {
+    @Transient
+    public static final String SEQUENCE_NAME="comment_sequence";
 
     @Id // Позволяет указать какое поле является идентификатором
     private String id;
     private Date datetime;
-    @DBRef
+
+    @Transient
     private Book book;
     private String text;
 

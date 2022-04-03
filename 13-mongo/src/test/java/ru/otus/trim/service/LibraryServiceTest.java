@@ -10,7 +10,6 @@ import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.repository.BookRepository;
-import ru.otus.trim.repository.CommentRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +32,6 @@ class LibraryServiceTest {
     private BookRepository books;
     @MockBean
     private AuthorRepository authors;
-    @MockBean
-    private CommentRepository comments;
 
     @DisplayName("возвращать список всех книг")
     @Test
@@ -75,7 +72,6 @@ class LibraryServiceTest {
     void shouldRemoveBookById() {
         given(books.findById("1")).willReturn(Optional.of(new Book()));
         library.removeBookById("1");
-        verify(comments, times(1)).deleteByBook(any());
         verify(books, times(1)).delete(any());
     }
 

@@ -9,7 +9,7 @@ import ru.otus.trim.model.Comment;
 public class LibraryOutServiceImpl implements LibraryOutService {
     @Override
     public String getAuthorString(Author author) {
-        return String.format ("A: id=%s -> '%s'",author.getId(), author.getName());
+        return String.format ("A: '%s'", author.getName());
     }
 
     @Override

@@ -1,27 +1,22 @@
 package ru.otus.trim.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.trim.model.Comment;
 import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.repository.BookRepository;
-import ru.otus.trim.repository.CommentRepository;
 import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
 
 import java.util.*;
 
+@AllArgsConstructor
 @Service
 public class LibraryServiceImpl implements LibraryService {
     public final BookRepository books;
     public final AuthorRepository authors;
-    public final CommentRepository comments;
-
-    public LibraryServiceImpl(BookRepository books, AuthorRepository authors, CommentRepository comments) {
-        this.books = books;
-        this.authors = authors;
-        this.comments = comments;
-    }
+    private final SequenceService sequenceService;
 
     @Transactional
     @Override
@@ -38,10 +33,9 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional
     @Override
-    public Book removeBookById(String bookID) {
-        Book book = getBookById(bookID);
+    public Book removeBookById(String bookId) {
+        Book book = getBookById(bookId);
         if (book != null) {
-            comments.deleteByBook(book);
             books.delete(book);
         }
         return book;
@@ -49,8 +43,8 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional(readOnly = true)
     @Override
-    public Book getBookById(String bookID) {
-        Optional<Book> opt = books.findById(bookID);
+    public Book getBookById(String bookId) {
+        Optional<Book> opt = books.findById(bookId);
         return opt.orElse(null);
     }
 
@@ -83,8 +77,6 @@ public class LibraryServiceImpl implements LibraryService {
     public Author removeAuthor(String name) {
         Author author = authors.findByName(name);
         if (author != null){
-            List<Book> removed = books.deleteByAuthor(author);
-            for (Book book : removed) comments.deleteByBook(book);
             authors.delete(author);
         }
         return author;
@@ -103,28 +95,66 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional()
     @Override
     public Comment addComment(String bookId, String text) {
-        Comment comment = new Comment(books.findById(bookId).orElseThrow(), text);
-        return comments.save(comment);
+        Book book = books.findById(bookId).orElseThrow();
+        Comment comment = new Comment("c"+sequenceService.generateSequence(Comment.SEQUENCE_NAME), new Date (), book, text);
+        List<Comment> comments = book.getComment();
+        if (comments == null){
+            book.setComment(List.of(comment));
+        }
+        else {
+            comments.add (comment);
+        }
+        books.save(book);
+        return comment;
     }
 
     @Transactional()
     @Override
-    public Comment changeComment(String commentID, String text) {
-        Comment comment = comments.findById(commentID).orElseThrow();
-        comment.setText(text);
-        return comments.save(comment);
+    public Comment changeComment(String bookId, String commentId, String text) {
+        Book book = books.findById(bookId).orElseThrow();
+        List<Comment> comments = book.getComment();
+        ListIterator<Comment> it = comments.listIterator();
+        for (Comment comment : comments){
+            if (comment.getId().equalsIgnoreCase(commentId)){
+                comment.setText(text);
+                books.save(book);
+                comment.setBook(book);
+                return comment;
+            }
+        }
+        return null;
     }
 
     @Transactional()
     @Override
-    public void removeComment(String commentID) {
-        comments.deleteById(commentID);
+    public void removeComment(String bookId, String commentId) {
+        Book book = books.findById(bookId).orElseThrow();
+        List<Comment> comments = book.getComment();
+        ListIterator<Comment> it = comments.listIterator();
+        while (it.hasNext()){
+            if (it.next().getId().equalsIgnoreCase(commentId)){
+                it.remove();
+                books.save(book);
+                break;
+            }
+        }
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Comment> getComments(String bookId) {
-        return comments.findByBookId(bookId);
+        Book book = books.findById(bookId).orElseThrow();
+        List<Comment> comments = book.getComment();
+        if (comments == null){
+            return List.of();
+        }
+        else {
+            for (Comment comment : comments){
+                comment.setBook(book);
+            }
+            return comments;
+        }
+        //return books.getBookCommentById(bookId);
     }
 
     @Transactional(readOnly = true)

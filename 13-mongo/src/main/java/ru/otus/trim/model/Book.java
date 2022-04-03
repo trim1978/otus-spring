@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "books")
+@Document("books")
 public class Book {
 
     @Id // Позволяет указать какое поле является идентификатором
@@ -22,7 +22,7 @@ public class Book {
     @DBRef
     private Author author;
     private List<String> genres;
-
+    private List<Comment> comment;
     public Book(String title, Author author, String... genre) {
         this.title = title;
         this.author = author;
