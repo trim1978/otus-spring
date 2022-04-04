@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of books</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books {
+            border: 1px solid steelblue;
+            width: 300px;
+            border-collapse: collapse;
+        }
+
+        .books tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .books td:last-child, td:first-child {
+            width: 50px;
+        }
+    </style>
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h3 th:text="#{books-table-header}">Books:</h3>
+<a th:if="${page} > 0" th:href="@{/books/(page=(${page}-1))}" href="book_list.html">prev</a><span>|</span>
+<a th:if="${total} - 1 > ${page}" th:href="@{/books/(page=(${page}+1))}" href="book_list.html">next</a><span>|</span>
+
+<table class="books">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>Actions</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<span>|</span>
+<a th:href="@{/book/(id=0)}" href="book_edit.html">add book</a><span>|</span>
+<a th:href="@{/books/}" href="book_list.html">books</a><span>|</span>
+<a th:href="@{/books_generate/?count=100}" href="book_list.html">books generate</a><span>|</span>
+<a th:href="@{/author/(id=0)}" href="author_edit.html">add author</a><span>|</span>
+<a th:href="@{/authors/}" href="author_list.html">authors</a><span>|</span>
+<a th:href="@{/genres/}" href="genre_list.html">genres</a><span>|</span>
+
+<script>
+    $(function () {
+        $.get('/api/books').done(function (books) {
+            books.forEach(function (book) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${book.id}</td>
+                        <td>${book.title}</td>
+                        <td>${book.author.name}</td>
+                        <td>${book.genre.name}</td>
+                        <td>
+                            <a href="/book/?id=${book.id}">edit</a>
+                            <span>|</span>
+
+                            <form object="${book}" action="/book_remove/?id=${book.id}" method="delete">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit">del</button>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="/comments_book/?book=${book.id}">view</a>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+</script>
+
+</body>
+</html>
