@@ -49,7 +49,7 @@
 <span>|</span>
 <a th:href="@{/book/(id=0)}" href="book_edit.html">add book</a><span>|</span>
 <a th:href="@{/books/}" href="book_list.html">books</a><span>|</span>
-<a th:href="@{/books_generate/?count=100}" href="book_list.html">books generate</a><span>|</span>
+<a th:href="@{/api/books_generate/?count=100}" href="book_list.html">books generate</a><span>|</span>
 <a th:href="@{/author/(id=0)}" href="author_edit.html">add author</a><span>|</span>
 <a th:href="@{/authors/}" href="author_list.html">authors</a><span>|</span>
 <a th:href="@{/genres/}" href="genre_list.html">genres</a><span>|</span>
@@ -68,7 +68,7 @@
                             <a href="/book/?id=${book.id}">edit</a>
                             <span>|</span>
 
-                            <form object="${book}" action="/book_remove/?id=${book.id}" method="delete">
+                            <form object="${book}" action="/api/book_remove/?id=${book.id}" method="delete">
                                 <input type="hidden" name="_method" value="delete"/>
                                 <button type="submit">del</button>
                             </form>

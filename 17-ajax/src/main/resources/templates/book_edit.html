@@ -52,12 +52,6 @@
     <div class="row">
         <label for="book-author-input">Author:</label>
         <select th:field="*{author.id}" id="book-author-input" name="author" form="edit-form">
-            <option th:if="${author.id} == *{author.id}" selected th:each="author : ${authors}" th:value="${author.id}" value="1" th:text="${author.name}">
-                author
-            </option>
-            <option th:if="${author.id} != *{author.id}" th:each="author : ${authors}" th:value="${author.id}" value="1" th:text="${author.name}">
-                author
-            </option>
         </select>
         <div class="errors" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Wrong book author error</div>
     </div>
@@ -65,12 +59,6 @@
     <div class="row">
         <label for="book-genre-input">Genre:</label>
         <select th:field="*{genre.id}" id="book-genre-input" name="genre" form="edit-form">
-            <option th:if="${genre.id} == *{genre.id}" selected th:each="genre : ${genres}" th:value="${genre.id}" value="1" th:text="${genre.name}">
-                genre
-            </option>
-            <option th:if="${genre.id} != *{genre.id}" th:each="genre : ${genres}" th:value="${genre.id}" value="1" th:text="${genre.name}">
-                genre
-            </option>
         </select>
         <div class="errors" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}">Wrong book genre error</div>
     </div>
@@ -80,6 +68,24 @@
         <a href="book_list.html" th:href="@{/books}"><button type="button" th:text="#{cancel-button-caption}">Cancel</button></a>
     </div>
 </form>
+<script>
+    $(function () {
+        $.get('/api/authors').done(function (authors) {
+            authors.forEach(function (author) {
+                $('#book-author-input').append(`<option value="${author.id}"');
 
+                $('#book-author-input').append(`>${author.name}</option>`);
+            });
+        })
+    });
+    $(function () {
+        $.get('/api/genres').done(function (genres) {
+            genres.forEach(function (genre) {
+                var opt = new Option(${genre.name}, ${genre.id}, true, true);
+                $('#book-genre-input').append(opt)
+            });
+        })
+    });
+</script>
 </body>
 </html>

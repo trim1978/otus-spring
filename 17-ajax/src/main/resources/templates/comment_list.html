@@ -24,12 +24,6 @@
             width: 50px;
         }
 
-        h3 {
-            background-image: url("../static/listmark.png");
-            background-repeat: no-repeat;
-            padding: 2px;
-            padding-left: 30px;
-        }
     </style>
     <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
 </head>
@@ -53,29 +47,39 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="comment : ${comments}">
-        <td th:text="${comment.id}">1</td>
-        <td th:text="${comment.datetime}">Datetime</td>
-        <td th:text="${comment.text}">Text</td>
-        <td>
-            <a th:href="@{/comment_edit/(id=${comment.id})}" href="comment_edit.html" th:text="#{edit-button-caption}">edit</a>
-            <span>|</span>
-            <form th:object="${comment}" th:action="@{/comment_remove/(id=${comment.id})}" th:method="delete">
-                <input type="hidden" name="_method" value="delete"/>
-                <button type="submit">del</button>
-            </form>
-        </td>
-    </tr>
     </tbody>
 </table>
 <span>|</span>
 <a th:href="@{/comment_add/(book=*{book})}" href="comment_edit.html">add comment</a><span>|</span>
 <a th:href="@{/book/(id=0)}" href="book_edit.html">add book</a><span>|</span>
 <a th:href="@{/books/}" href="book_list.html">books</a><span>|</span>
-<a th:href="@{/books_generate/?count=100}" href="book_list.html">books generate</a><span>|</span>
+<a th:href="@{/api/books_generate/?count=100}" href="book_list.html">books generate</a><span>|</span>
 <a th:href="@{/author/(id=0)}" href="author_edit.html">add author</a><span>|</span>
 <a th:href="@{/authors/}" href="author_list.html">authors</a><span>|</span>
 <a th:href="@{/genres/}" href="genre_list.html">genres</a><span>|</span>
+<script>
+    $(function () {
+        $.get('/api/comments_book?book=${book}').done(function (comments) {
+            comments.forEach(function (comment) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${comment.id}</td>
+                        <td>${comment.datetime}</td>
+                        <td>${comment.text}</td>
+                        <td>
+                            <a href="/comment_edit/?id=${comment.id}">edit</a>
+                            <span>|</span>
+                            <form object="${comment}" action="/api/comment_remove/?id=${comment.id}" method="delete">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit">del</button>
+                            </form>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+</script>
 
 </body>
 </html>

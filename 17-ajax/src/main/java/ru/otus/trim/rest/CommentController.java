@@ -5,10 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.trim.model.Book;
+import ru.otus.trim.model.Comment;
 import ru.otus.trim.repository.BookRepository;
 import ru.otus.trim.repository.CommentRepository;
 import ru.otus.trim.rest.dto.BookDto;
@@ -35,4 +37,12 @@ public class CommentController {
                     .map(CommentDto::toDto)
                     .collect(Collectors.toList());
     }
+    @DeleteMapping("/api/comment_remove")
+    public boolean removeCommentById(@RequestParam(value = "id") long id) {
+        Comment comment = commentRepository.findById(id).orElseThrow();
+        //long book = comment.getBook().getId();
+        commentRepository.deleteById(id);
+        return true;
+    }
+
 }

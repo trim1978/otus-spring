@@ -43,14 +43,6 @@ public class CommentPageController {
         return "comment_edit";
     }
 
-    @DeleteMapping("/comment_remove")
-    public String removeCommentById(@RequestParam(value = "id") long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow();
-        long book = comment.getBook().getId();
-        commentRepository.deleteById(id);
-        return "redirect:/comments_book/?book="+book;
-    }
-
     @GetMapping("/comment_add")
     public String getCommentByBook(@RequestParam("book") long bookId, Model model) {
         Book book = bookRepository.findById(bookId).orElseThrow();
