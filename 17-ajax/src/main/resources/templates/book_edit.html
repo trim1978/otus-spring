@@ -51,14 +51,14 @@
 
     <div class="row">
         <label for="book-author-input">Author:</label>
-        <select th:field="*{author.id}" id="book-author-input" name="author" form="edit-form">
+        <select th:attr="data-current=*{author.id}" th:field="*{author.id}" id="book-author-input" name="author" form="edit-form">
         </select>
         <div class="errors" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Wrong book author error</div>
     </div>
 
     <div class="row">
         <label for="book-genre-input">Genre:</label>
-        <select th:field="*{genre.id}" id="book-genre-input" name="genre" form="edit-form">
+        <select th:attr="data-current=*{genre.id}" th:field="*{genre.id}" id="book-genre-input" name="genre" form="edit-form">
         </select>
         <div class="errors" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}">Wrong book genre error</div>
     </div>
@@ -71,18 +71,21 @@
 <script>
     $(function () {
         $.get('/api/authors').done(function (authors) {
+            var current = document.getElementById('book-author-input');
             authors.forEach(function (author) {
-                $('#book-author-input').append(`<option value="${author.id}"');
-
-                $('#book-author-input').append(`>${author.name}</option>`);
+                var selected = current.dataset.current === `${author.id}`;
+                var opt = new Option(`${author.name}`, `${author.id}`, selected, selected);
+                $('#book-author-input').append(opt);
             });
         })
     });
     $(function () {
         $.get('/api/genres').done(function (genres) {
+            var current = document.getElementById('book-genre-input');
             genres.forEach(function (genre) {
-                var opt = new Option(${genre.name}, ${genre.id}, true, true);
-                $('#book-genre-input').append(opt)
+                var selected = current.dataset.current === `${genre.id}`;
+                var opt = new Option(`${genre.name}`, `${genre.id}`, selected, selected);
+                $('#book-genre-input').append(opt);
             });
         })
     });
