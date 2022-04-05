@@ -28,7 +28,7 @@
 </head>
 <body>
 
-<h3 th:text="#{books-table-header}">Books:</h3>
+<h3 th:attr="data-current=${page}" id="book-title" th:text="#{books-table-header}">Books:</h3>
 <a th:if="${page} > 0" th:href="@{/books/(page=(${page}-1))}" href="book_list.html">prev</a><span>|</span>
 <a th:if="${total} - 1 > ${page}" th:href="@{/books/(page=(${page}+1))}" href="book_list.html">next</a><span>|</span>
 
@@ -56,7 +56,7 @@
 
 <script>
     $(function () {
-        $.get('/api/books').done(function (books) {
+        $.get('/api/books?page='+document.getElementById('book-title').dataset.current).done(function (books) {
             books.forEach(function (book) {
                 $('tbody').append(`
                     <tr>
@@ -68,8 +68,9 @@
                             <a href="/book/?id=${book.id}">edit</a>
                             <span>|</span>
 
-                            <form object="${book}" action="/api/book_remove/?id=${book.id}" method="delete">
+                            <form object="${book}" action="/api/book_remove/" method="POST">
                                 <input type="hidden" name="_method" value="delete"/>
+                                <input type='hidden' name='id' value='${book.id}'/>
                                 <button type="submit">del</button>
                             </form>
                         </td>

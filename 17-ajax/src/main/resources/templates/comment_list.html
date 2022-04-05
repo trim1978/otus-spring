@@ -37,7 +37,7 @@
 <h>Genre: [[*{genre}]]</h>
 <br>
 
-<table class="comments">
+<table th:attr="data-current=*{book}" id="book-title" class="comments">
     <thead>
     <tr>
         <th>ID</th>
@@ -59,7 +59,8 @@
 <a th:href="@{/genres/}" href="genre_list.html">genres</a><span>|</span>
 <script>
     $(function () {
-        $.get('/api/comments_book?book=${book}').done(function (comments) {
+        var id = document.getElementById('book-title').dataset.current;
+        $.get('/api/comments_book?book='+id).done(function (comments) {
             comments.forEach(function (comment) {
                 $('tbody').append(`
                     <tr>
@@ -67,11 +68,12 @@
                         <td>${comment.datetime}</td>
                         <td>${comment.text}</td>
                         <td>
-                            <a href="/comment_edit/?id=${comment.id}">edit</a>
+                            <a href='/comment_edit/?id=${comment.id}'>edit</a>
                             <span>|</span>
-                            <form object="${comment}" action="/api/comment_remove/?id=${comment.id}" method="delete">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit">del</button>
+                            <form action='/api/comment_remove/' onClick='javascript:window.location.replace("/comments_book/?book="+id)' method='POST'>
+                                <input type='hidden' name='_method' value='delete'/>
+                                <input type='hidden' name='id' value='${comment.id}'/>
+                                <button type='submit'>del</button>
                             </form>
                         </td>
                     </tr>
