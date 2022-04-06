@@ -80,7 +80,7 @@
             document.getElementById('next_l').style.visibility = page < max ? "visible" : "hidden";
             document.getElementById('page_number').innerHTML = ""+(parseInt (page)+1);
 
-            $('tbody').innerHTML ='<tbody></tbody>';
+            $('tbody').html ('');
             books.forEach(function (book) {
                 $('tbody').append(`
                     <tr id='c_${book.id}'>
