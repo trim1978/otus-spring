@@ -63,24 +63,38 @@
         $.get('/api/comments_book?book='+id).done(function (comments) {
             comments.forEach(function (comment) {
                 $('tbody').append(`
-                    <tr>
+                    <tr id='c_${comment.id}'>
                         <td>${comment.id}</td>
                         <td>${comment.datetime}</td>
                         <td>${comment.text}</td>
                         <td>
                             <a href='/comment_edit/?id=${comment.id}'>edit</a>
                             <span>|</span>
-                            <form action='/api/comment_remove/' onClick='javascript:window.location.replace("/comments_book/?book="+id)' method='POST'>
-                                <input type='hidden' name='_method' value='delete'/>
-                                <input type='hidden' name='id' value='${comment.id}'/>
-                                <button type='submit'>del</button>
-                            </form>
+                            <a href="javascript:delete_comment(${comment.id});">del</a>
                         </td>
                     </tr>
                 `)
             });
         })
     });
+    var delete_comment = function (id)
+    {
+        if (window.confirm("Do you really want to remove comment " + id + " ?")) {
+            $.ajax({
+                    type: "DELETE",
+                    url: "/api/comment_remove/",
+                    data: "id="+id,
+                    success: function(data)
+                    {
+                        $("#c_"+id).replaceWith("");
+                    },
+                    error: function(){
+                        alert("Error with delete comment " + id );
+                    }
+            });
+        }
+    }
+
 </script>
 
 </body>

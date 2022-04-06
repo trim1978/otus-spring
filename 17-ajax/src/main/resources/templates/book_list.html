@@ -59,7 +59,7 @@
         $.get('/api/books?page='+document.getElementById('book-title').dataset.current).done(function (books) {
             books.forEach(function (book) {
                 $('tbody').append(`
-                    <tr>
+                    <tr id='c_${book.id}'>
                         <td>${book.id}</td>
                         <td>${book.title}</td>
                         <td>${book.author.name}</td>
@@ -67,12 +67,7 @@
                         <td>
                             <a href="/book/?id=${book.id}">edit</a>
                             <span>|</span>
-
-                            <form object="${book}" action="/api/book_remove/" method="POST">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <input type='hidden' name='id' value='${book.id}'/>
-                                <button type="submit">del</button>
-                            </form>
+                            <a href="javascript:delete_book(${book.id}, '${book.title}');">del</a>
                         </td>
                         <td>
                             <a href="/comments_book/?book=${book.id}">view</a>
@@ -82,6 +77,24 @@
             });
         })
     });
+    var delete_book = function (id, title)
+    {
+        if (window.confirm("Do you really want to remove book '" + title + "' ?")) {
+            $.ajax({
+                    type: "DELETE",
+                    url: "/api/book_remove/",
+                    data: "id="+id,
+                    success: function(data)
+                    {
+                        $("#c_"+id).replaceWith("");
+                    },
+                    error: function(da, textStatus, ta){
+                        alert("Error with delete book '" + title + "'" );
+                    }
+            });
+        }
+    }
+
 </script>
 
 </body>
