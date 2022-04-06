@@ -29,8 +29,15 @@
 <body>
 
 <h3 th:attr="data-current=${page}" id="book-title" th:text="#{books-table-header}">Books:</h3>
-<a th:if="${page} > 0" th:href="@{/books/(page=(${page}-1))}" href="book_list.html">prev</a><span>|</span>
-<a th:if="${total} - 1 > ${page}" th:href="@{/books/(page=(${page}+1))}" href="book_list.html">next</a><span>|</span>
+
+<a id="prev_l" href="javascript:request_prev ();">previous</a>
+
+<span>|</span>
+<h th:attr="data-total=${total}" id="book-page">Page:</h>
+<h id="page_number">[[${page}]]</h>
+<span>|</span>
+<a id="next_l" href="javascript:request_next ();">next</a>
+<span>|</span>
 
 <table class="books">
     <thead>
@@ -56,7 +63,24 @@
 
 <script>
     $(function () {
-        $.get('/api/books?page='+document.getElementById('book-title').dataset.current).done(function (books) {
+        request_books (document.getElementById('book-title').dataset.current);
+    });
+    var request_prev = function (){
+        request_books (parseInt (document.getElementById('book-title').dataset.current) - 1);
+    }
+    var request_next = function (){
+        request_books (parseInt (document.getElementById('book-title').dataset.current) + 1);
+    }
+    var request_books = function (page){
+        $.get('/api/books?page='+page).done(function (books) {
+            document.getElementById('book-title').dataset.current = page;
+            var max = parseInt (document.getElementById('book-page').dataset.total);
+            max = Math.floor(max / 10) + (max % 10 > 0 ? 1 : 0) - 1;
+            document.getElementById('prev_l').style.visibility = page > 0 ? "visible" : "hidden";
+            document.getElementById('next_l').style.visibility = page < max ? "visible" : "hidden";
+            document.getElementById('page_number').innerHTML = ""+(parseInt (page)+1);
+
+            $('tbody').innerHTML ='<tbody></tbody>';
             books.forEach(function (book) {
                 $('tbody').append(`
                     <tr id='c_${book.id}'>
@@ -76,7 +100,10 @@
                 `)
             });
         })
-    });
+
+    };
+
+
     var delete_book = function (id, title)
     {
         if (window.confirm("Do you really want to remove book '" + title + "' ?")) {
