@@ -28,12 +28,15 @@
 </head>
 <body>
 
-<h3 th:attr="data-current=${page}" id="book-title" th:text="#{books-table-header}">Books:</h3>
+<div data-step="10" id="book-step"></div>
+<div th:attr="data-current=${page}" id="book-current"></div>
+<div th:attr="data-total=${total}" id="book-page"></div>
+
+<h3>Books:</h3>
 
 <a id="prev_l" href="javascript:request_prev ();">previous</a>
-
 <span>|</span>
-<h th:attr="data-total=${total}" id="book-page">Page:</h>
+<h>Page:</h>
 <h id="page_number">[[${page}]]</h>
 <span>|</span>
 <a id="next_l" href="javascript:request_next ();">next</a>
@@ -54,28 +57,35 @@
     </tbody>
 </table>
 <span>|</span>
-<a th:href="@{/book/(id=0)}" href="book_edit.html">add book</a><span>|</span>
-<a th:href="@{/books/}" href="book_list.html">books</a><span>|</span>
-<a th:href="@{/api/books_generate/?count=100}" href="book_list.html">books generate</a><span>|</span>
-<a th:href="@{/author/(id=0)}" href="author_edit.html">add author</a><span>|</span>
-<a th:href="@{/authors/}" href="author_list.html">authors</a><span>|</span>
-<a th:href="@{/genres/}" href="genre_list.html">genres</a><span>|</span>
+<a th:href="@{/book/(id=0)}" href="book_edit.html">add book</a>
+<span>|</span>
+<a th:href="@{/books/}" href="book_list.html">books</a>
+<span>|</span>
+<a href="javascript:generate (100);">generate books</a>
+<span>|</span>
+<a th:href="@{/author/(id=0)}" href="author_edit.html">add author</a>
+<span>|</span>
+<a th:href="@{/authors/}" href="author_list.html">authors</a>
+<span>|</span>
+<a th:href="@{/genres/}" href="genre_list.html">genres</a>
+<span>|</span>
 
 <script>
     $(function () {
-        request_books (document.getElementById('book-title').dataset.current);
+        request_books (document.getElementById('book-current').dataset.current);
     });
     var request_prev = function (){
-        request_books (parseInt (document.getElementById('book-title').dataset.current) - 1);
+        request_books (parseInt (document.getElementById('book-current').dataset.current) - 1);
     }
     var request_next = function (){
-        request_books (parseInt (document.getElementById('book-title').dataset.current) + 1);
+        request_books (parseInt (document.getElementById('book-current').dataset.current) + 1);
     }
     var request_books = function (page){
-        $.get('/api/books?page='+page).done(function (books) {
-            document.getElementById('book-title').dataset.current = page;
+        var step = parseInt (document.getElementById('book-step').dataset.step);
+        $.get('/api/books?page='+page+'&step=10').done(function (books) {
+            document.getElementById('book-current').dataset.current = page;
             var max = parseInt (document.getElementById('book-page').dataset.total);
-            max = Math.floor(max / 10) + (max % 10 > 0 ? 1 : 0) - 1;
+            max = Math.floor(max / step) + (max % step > 0 ? 1 : 0) - 1;
             document.getElementById('prev_l').style.visibility = page > 0 ? "visible" : "hidden";
             document.getElementById('next_l').style.visibility = page < max ? "visible" : "hidden";
             document.getElementById('page_number').innerHTML = ""+(parseInt (page)+1);
@@ -102,6 +112,25 @@
         })
 
     };
+
+    var generate = function (count)
+    {
+            $.ajax({
+                    type: "PATCH",
+                    url: "/api/books_generate/?count="+count,
+                    success: function(data)
+                    {
+                        alert ("Generated " + count + " books");
+                        var max = parseInt (document.getElementById("book-page").dataset.total);
+                        max += count;
+                        document.getElementById("book-page").dataset.total = max;
+                        request_books (0);
+                    },
+                    error: function(da, textStatus, ta){
+                        alert("Error with generate books");
+                    }
+            });
+    }
 
 
     var delete_book = function (id, title)
