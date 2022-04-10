@@ -50,10 +50,36 @@
     </div>
 
     <div class="row">
-        <button type="submit" th:text="#{save-button-caption}">Save</button>
-        <a href="author_list.html" th:href="@{/authors}"><button type="button" th:text="#{cancel-button-caption}">Cancel</button></a>
+<!--        <a href="author_list.html" th:href="@{/authors}">-->
+            <button id="send" type="submit">Save</button>
+<!--        </a>-->
+        <a href="author_list.html" th:href="@{/authors}"><button type="button">Cancel</button></a>
     </div>
 </form>
+<div id="result_form"></div>
+<script>
+<!--    var btn=document.getElementById('send');-->
+<!--    btn.onclick=function ()-->
+<!--    {-->
+<!--        sendAjaxForm('result_form', 'edit_form', '/api/author');-->
+<!--		return false;-->
+<!--    };-->
 
+<!--    var sendAjaxForm = function (result_form, ajax_form, url) {-->
+<!--    $.ajax({-->
+<!--        url:     url,-->
+<!--        type:     "POST", //метод отправки-->
+<!--        dataType: "html", //формат данных-->
+<!--        data: $("#"+ajax_form).serialize(),  // Сеарилизуем объект-->
+<!--        success: function(response) { //Данные отправлены успешно-->
+<!--        	result = $.parseJSON(response);-->
+<!--        	$('#result_form').html('Имя: '+result.id+'<br>Телефон: '+result.name);-->
+<!--    	},-->
+<!--    	error: function(response) { // Данные не отправлены-->
+<!--            $('#result_form').html('Ошибка. Данные не отправлены.');-->
+<!--    	}-->
+<!-- 	});-->
+<!--}-->
+</script>
 </body>
 </html>

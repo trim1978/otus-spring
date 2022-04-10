@@ -1,47 +1,35 @@
 package ru.otus.trim.page;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import ru.otus.trim.repository.AuthorRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.otus.trim.rest.AuthorController;
 import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.rest.exceptions.NotFoundException;
-
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Controller
 public class AuthorPageController {
-    private final AuthorRepository authorRepository;
+    private final AuthorController authorController;
 
     @GetMapping("/authors")
-    public String listPage(Model model) {
-        //model.addAttribute("keywords", "list users in Omsk, omsk, list users, list users free");
+    public String listPage() {
         return "author_list";
     }
 
     @GetMapping("/author")
     public String getAuthor(@RequestParam("id") int id, Model model) {
-        model.addAttribute("author",id > 0 ? AuthorDto.toDto (authorRepository.findById(id).orElseThrow(NotFoundException::new)): new AuthorDto (0, ""));
+        model.addAttribute("author",id > 0 ? authorController.getAuthorByIdInRequest(id) : new AuthorDto (0, ""));
         return "author_edit";
     }
 
     @PostMapping("/author")
-    public String saveAuthor(@ModelAttribute("author") AuthorDto author,
-                             BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "author_edit";
-        }
-        authorRepository.save(author.toDomainObject());
+    public String saveAuthor(@ModelAttribute("author") AuthorDto author) {
+        authorController.saveAuthor(author);
         return "redirect:/authors";
     }
-
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNotFound(NotFoundException ex) {
-        return ResponseEntity.badRequest().body("Такого автора нет");
-    }
-
 }

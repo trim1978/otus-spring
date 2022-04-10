@@ -17,23 +17,22 @@ public class AuthorController {
 
     private final AuthorRepository repository;
 
-    @RequestMapping(value = "/api/authors", method = RequestMethod.GET, params = {})
+    @GetMapping(value = "/api/authors")
     public List<AuthorDto> getAllAuthors() {
         return repository.findAll().stream()
                 .map(AuthorDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/api/author", method = RequestMethod.GET)
+    @GetMapping(value = "/api/author")
     public AuthorDto getAuthorByIdInRequest(@RequestParam("id") int id) {
         Author author = repository.findById(id).orElseThrow(NotFoundException::new);
         return AuthorDto.toDto(author);
     }
 
-    @GetMapping("/rest_author/{id}")
-    public AuthorDto getAuthorByIdInPath(@PathVariable("id") int id) {
-        Author author = repository.findById(id).orElseThrow(NotFoundException::new);
-        return AuthorDto.toDto(author);
+    @PostMapping("/api/author")
+    public AuthorDto saveAuthor(@ModelAttribute("author") AuthorDto author) {
+        return AuthorDto.toDto(repository.save(author.toDomainObject()));
     }
 
     @ExceptionHandler(NotFoundException.class)

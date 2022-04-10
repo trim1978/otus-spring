@@ -28,7 +28,7 @@
 </head>
 <body>
 
-<div data-step="10" id="book-step"></div>
+<div th:attr="data-step=${step}" id="book-step"></div>
 <div th:attr="data-current=${page}" id="book-current"></div>
 <div th:attr="data-total=${total}" id="book-page"></div>
 

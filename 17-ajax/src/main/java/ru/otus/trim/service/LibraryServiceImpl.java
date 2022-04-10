@@ -65,6 +65,11 @@ public class LibraryServiceImpl implements LibraryService {
         return book;
     }
 
+    @Override
+    public long getBooksCount() {
+        return books.count();
+    }
+
     @Transactional
     @Override
     public Author getAuthor(String name) {

@@ -2,7 +2,10 @@ spring:
 
   main:
     banner-mode: off
-
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 logging:
   level:
     ROOT: ERROR

@@ -1,4 +1,4 @@
-package ru.otus.trim.controller;
+package ru.otus.trim.rest;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,7 +12,6 @@ import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
 import ru.otus.trim.model.Genre;
-import ru.otus.trim.rest.BookController;
 import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.rest.dto.BookDto;
 import ru.otus.trim.rest.dto.GenreDto;
@@ -43,10 +42,9 @@ class BookControllerTest {
     void shouldReturnCorrectForList () throws Exception {
         when (library.getBooks(Mockito.any())).thenReturn(new PageImpl<>(List.of(BOOK)));
         mockMvc.perform(get("/api/books"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("book_list"))
-                .andExpect(model().attribute("books", List.of(BookDto.toDto(BOOK))))
-        ;
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(library, times(1)).getBooks (any());
     }
 
     @Test
@@ -55,21 +53,17 @@ class BookControllerTest {
         when(library.getAuthors()).thenReturn(List.of(AUTHOR));
         when(library.getGenres()).thenReturn(List.of(GENRE));
         this.mockMvc.perform(get("/api/book").param("id", "1"))
-                .andExpect(view().name("book_edit"))
-                .andExpect(model().attribute("book", BookDto.toDto(BOOK)))
-                .andExpect(model().attribute("authors", List.of(AuthorDto.toDto(AUTHOR))))
-                .andExpect(model().attribute("genres", List.of(GenreDto.toDto(GENRE))))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+        verify(library, times(1)).getBookById(anyLong());
     }
 
     @Test
     public void shouldDoCorrectForRemove() throws Exception {
-        when(library.getBookById(Mockito.anyLong())).thenReturn(BOOK);
-        this.mockMvc.perform(delete("/api/book_remove").param("id", "1"))
-                .andExpect(redirectedUrl("/books"))
-                .andExpect(view().name("redirect:/books"))
-                .andExpect(status().is3xxRedirection());
-
+        this.mockMvc.perform(post("/api/book_remove").param("id", "1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(library, times(1)).removeBookById(anyLong());
     }
 
     @Test
@@ -77,16 +71,13 @@ class BookControllerTest {
         when(library.getAuthors()).thenReturn(List.of(AUTHOR));
         when(library.getGenres()).thenReturn(List.of(GENRE));
         this.mockMvc.perform(get("/api/book").param("id", "0"))
-                .andExpect(view().name("book_edit"))
-                .andExpect(model().attribute("book", new BookDto (0, "", null, null)))
-                .andExpect(model().attribute("authors", List.of(AuthorDto.toDto(AUTHOR))))
-                .andExpect(model().attribute("genres", List.of(GenreDto.toDto(GENRE))))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     void shouldReturnErrorNotFound() throws Exception {
-        when(library.getBookById(3L)).thenThrow(NotFoundException.class);
+        when(library.getBookById(3L)).thenReturn(null);//Throw(NotFoundException.class);
         this.mockMvc.perform(get("/api/book").param("id", "3"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Такой книги нет"));
@@ -98,10 +89,11 @@ class BookControllerTest {
         this.mockMvc.perform(post("/api/book")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .flashAttr("book", BookDto.toDto(BOOK)))
-                .andExpect(redirectedUrl("/books"))
-                .andExpect(view().name("redirect:/books"))
-                .andExpect(status().is3xxRedirection());
+                        .flashAttr("book", BookDto.toDto(BOOK))
+                //.andExpect(redirectedUrl("/books"))
+                //.andExpect(view().name("redirect:/books"))
+                //.andExpect(status().is3xxRedirection()
+        );
         verify(library, times(1)).updateBook(any(Book.class));
     }
 
