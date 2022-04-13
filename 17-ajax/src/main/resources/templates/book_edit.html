@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:if="*{id} != null">Edit book</title>
+    <title th:if="*{id} == null">Create book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<!-- book edition -->
+<form id="edit-form" name="book" action="book_edit.html" th:action="@{/book/(id=${book.id})}" th:method="post" th:object="${book}">
+    <h3 th:if="*{id} > 0">Edit Book:</h3>
+    <h3 th:if="*{id} == 0">Add Book:</h3>
+
+    <div class="row" th:if="*{id} > 0">
+        <label for="id-input">ID:</label>
+        <input id="id-input" name="id" type="text" readonly="readonly" th:value="*{id}" value="1"/>
+    </div>
+    <div class="row" th:if="*{id} == 0">
+        <input id="id-def" name="id" type="hidden" th:value="0" value="0"/>
+    </div>
+
+    <div class="row">
+        <label for="book-title-input">Title:</label>
+        <input id="book-title-input" name="title" type="text" th:value="*{title}" value="Working title"/>
+        <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
+    </div>
+
+    <div class="row">
+        <label for="book-author-input">Author:</label>
+        <select th:attr="data-current=*{author.id}" th:field="*{author.id}" id="book-author-input" name="author" form="edit-form">
+        </select>
+        <div class="errors" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Wrong book author error</div>
+    </div>
+
+    <div class="row">
+        <label for="book-genre-input">Genre:</label>
+        <select th:attr="data-current=*{genre.id}" th:field="*{genre.id}" id="book-genre-input" name="genre" form="edit-form">
+        </select>
+        <div class="errors" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}">Wrong book genre error</div>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+        <a href="book_list.html" th:href="@{/books}"><button type="button">Cancel</button></a>
+    </div>
+</form>
+<script>
+    $(function () {
+        $.get('/api/authors').done(function (authors) {
+            var current = document.getElementById('book-author-input');
+            authors.forEach(function (author) {
+                var selected = current.dataset.current === `${author.id}`;
+                var opt = new Option(`${author.name}`, `${author.id}`, selected, selected);
+                $('#book-author-input').append(opt);
+            });
+        })
+    });
+    $(function () {
+        $.get('/api/genres').done(function (genres) {
+            var current = document.getElementById('book-genre-input');
+            genres.forEach(function (genre) {
+                var selected = current.dataset.current === `${genre.id}`;
+                var opt = new Option(`${genre.name}`, `${genre.id}`, selected, selected);
+                $('#book-genre-input').append(opt);
+            });
+        })
+    });
+</script>
+</body>
+</html>
