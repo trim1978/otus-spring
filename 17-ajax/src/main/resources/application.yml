@@ -22,10 +22,6 @@ spring:
       hibernate:
         format_sql: false
 
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
 logging:
   level:
     ROOT: ERROR

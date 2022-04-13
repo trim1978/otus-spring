@@ -47,11 +47,4 @@ public class Book {
         this.id = id;
     }
 
-    // для совместимости теста
-    public List<Genre> getGenres (){
-        return  List.of(genre);
-    }
-    public List<Author> getAuthors (){
-        return  List.of(author);
-    }
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.trim.rest.AuthorController;
 import ru.otus.trim.rest.dto.AuthorDto;
-import ru.otus.trim.rest.exceptions.NotFoundException;
 
 @AllArgsConstructor
 @Controller

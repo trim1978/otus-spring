@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
@@ -53,7 +51,7 @@ public class BookController {
     }
 
     @PostMapping("/api/book")
-    public BookDto saveBook(@ModelAttribute("book") BookDto book) {
+    public BookDto saveBook(@RequestBody BookDto book) {
         Book result;
         if (book.getId() == 0){
             result = library.addBook(book.getTitle(), library.getAuthor(book.getAuthor().getId()).getName(), library.getGenre(book.getGenre().getId()).getName());

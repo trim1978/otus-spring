@@ -1,5 +1,6 @@
 package ru.otus.trim.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +13,17 @@ import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
 import ru.otus.trim.model.Genre;
-import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.rest.dto.BookDto;
-import ru.otus.trim.rest.dto.GenreDto;
 import ru.otus.trim.rest.exceptions.NotFoundException;
 import ru.otus.trim.service.LibraryService;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookController.class)
 class BookControllerTest {
@@ -60,7 +61,8 @@ class BookControllerTest {
 
     @Test
     public void shouldDoCorrectForRemove() throws Exception {
-        this.mockMvc.perform(post("/api/book_remove").param("id", "1"))
+        when (library.getBookById(1)).thenReturn(BOOK);
+        this.mockMvc.perform(delete("/api/book_remove").param("id", "1"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(library, times(1)).removeBookById(anyLong());
@@ -68,33 +70,29 @@ class BookControllerTest {
 
     @Test
     public void shouldReturnCorrectForAdd() throws Exception {
-        when(library.getAuthors()).thenReturn(List.of(AUTHOR));
-        when(library.getGenres()).thenReturn(List.of(GENRE));
+        when (library.getBookById(0)).thenReturn(new Book());
         this.mockMvc.perform(get("/api/book").param("id", "0"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+        verify(library, times(0)).getBookById(anyLong ());
     }
 
     @Test
-    void shouldReturnErrorNotFound() throws Exception {
+    void shouldReturnErrorNotFound() {
         when(library.getBookById(3L)).thenReturn(null);//Throw(NotFoundException.class);
-        this.mockMvc.perform(get("/api/book").param("id", "3"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Такой книги нет"));
+        assertThatThrownBy(() -> this.mockMvc.perform(get("/api/book").param("id", "3")))
+                .hasCause(new NotFoundException());
+        verify(library, times(1)).getBookById(anyLong ());
     }
 
     @Test
     void shouldReturnCorrectForSave() throws Exception {
-        when(library.updateBook(BOOK)).thenReturn(BOOK);
+        when(library.updateBook(any())).thenReturn(BOOK);
         this.mockMvc.perform(post("/api/book")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .flashAttr("book", BookDto.toDto(BOOK))
-                //.andExpect(redirectedUrl("/books"))
-                //.andExpect(view().name("redirect:/books"))
-                //.andExpect(status().is3xxRedirection()
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper ().writeValueAsString(BookDto.toDto(BOOK))))
+                .andExpect(status().isOk()
         );
         verify(library, times(1)).updateBook(any(Book.class));
     }
-
 }
