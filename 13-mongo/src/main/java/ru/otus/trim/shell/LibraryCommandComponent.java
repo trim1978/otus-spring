@@ -26,7 +26,7 @@ public class LibraryCommandComponent {
 
     @ShellMethod(value = "Remove book", key = {"remove_book","rb","db"})
     public String removeBook(String bookId) {
-        return String.format("Removed book %s", out.getBookString(library.removeBookById(bookId)));
+        return String.format("Removed book %s", bookId);
     }
 
     @ShellMethod(value = "Remove author", key = {"remove_author","ra","da"})

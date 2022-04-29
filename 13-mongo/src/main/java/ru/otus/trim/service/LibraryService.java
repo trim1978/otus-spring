@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface LibraryService {
     Book changeBook(String bookId, String title, String author, List<String> genres);
-    Book removeBookById (String bookId);
+    void removeBookById (String bookId);
     Book getBookById (String bookId);
     List<Book> getBooks ();
     Book addBook (String title, String author, String genre);

@@ -72,7 +72,7 @@ class LibraryServiceTest {
     void shouldRemoveBookById() {
         given(books.findById("1")).willReturn(Optional.of(new Book()));
         library.removeBookById("1");
-        verify(books, times(1)).delete(any());
+        verify(books, times(1)).deleteById(any());
     }
 
     @DisplayName("менять данные у книги по её id")

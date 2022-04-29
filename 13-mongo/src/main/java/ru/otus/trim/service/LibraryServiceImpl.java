@@ -33,12 +33,8 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional
     @Override
-    public Book removeBookById(String bookId) {
-        Book book = getBookById(bookId);
-        if (book != null) {
-            books.delete(book);
-        }
-        return book;
+    public void removeBookById(String bookId) {
+           books.deleteById(bookId);
     }
 
     @Transactional(readOnly = true)
