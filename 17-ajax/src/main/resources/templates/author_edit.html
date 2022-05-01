@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title th:if="*{id} != null">Edit author</title>
-    <title th:if="*{id} == null">Create author</title>
+    <title th:if="*{id} != 0">Edit author</title>
+    <title th:if="*{id} == 0">Create author</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -31,16 +31,16 @@
 <body>
 
 <!-- author edition -->
-<form id="edit-form" action="author_edit.html" th:action="@{/author/(id=${author.id})}" th:method="post" th:object="${author}">
-    <h3 th:text = "#{author-form-header}">Author Info:</h3>
+<form id="edit-form" action="author_edit.html" th:action="@{/authors/}" th:method="post" th:object="${author}">
+    <h3>Author Info:</h3>
 
     <div class="row" th:if="*{id} > 0">
         <label for="id-input">ID:</label>
-        <input id="id-input" type="text" readonly="readonly" th:value="*{id}" value="1"/>
+        <input id="id-input" name="id" type="text" readonly="readonly" th:value="*{id}" value="1"/>
     </div>
 
     <div class="row" th:if="*{id} == 0">
-        <input id="id-def" type="hidden" th:value="0" value="0"/>
+        <input id="id-def" name="id" type="hidden" th:value="0" value="0"/>
     </div>
 
     <div class="row">
@@ -50,36 +50,10 @@
     </div>
 
     <div class="row">
-<!--        <a href="author_list.html" th:href="@{/authors}">-->
-            <button id="send" type="submit">Save</button>
-<!--        </a>-->
-        <a href="author_list.html" th:href="@{/authors}"><button type="button">Cancel</button></a>
+        <button id="send" type="submit">Save</button>
+        <a href="author_list.html" th:href="@{/authors/}"><button type="button">Cancel</button></a>
     </div>
 </form>
 <div id="result_form"></div>
-<script>
-<!--    var btn=document.getElementById('send');-->
-<!--    btn.onclick=function ()-->
-<!--    {-->
-<!--        sendAjaxForm('result_form', 'edit_form', '/api/author');-->
-<!--		return false;-->
-<!--    };-->
-
-<!--    var sendAjaxForm = function (result_form, ajax_form, url) {-->
-<!--    $.ajax({-->
-<!--        url:     url,-->
-<!--        type:     "POST", //метод отправки-->
-<!--        dataType: "html", //формат данных-->
-<!--        data: $("#"+ajax_form).serialize(),  // Сеарилизуем объект-->
-<!--        success: function(response) { //Данные отправлены успешно-->
-<!--        	result = $.parseJSON(response);-->
-<!--        	$('#result_form').html('Имя: '+result.id+'<br>Телефон: '+result.name);-->
-<!--    	},-->
-<!--    	error: function(response) { // Данные не отправлены-->
-<!--            $('#result_form').html('Ошибка. Данные не отправлены.');-->
-<!--    	}-->
-<!-- 	});-->
-<!--}-->
-</script>
 </body>
 </html>

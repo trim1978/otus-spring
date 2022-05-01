@@ -31,7 +31,7 @@
 <body>
 
 <!-- comment edition -->
-<form id="edit-form" action="comment_edit.html" th:action="@{/comment/(id=${comment.id})}" th:method="post" th:object="${comment}">
+<form id="edit-form" action="comment_edit.html" th:action="@{/comments/}" th:method="post" th:object="${comment}">
     <div class="row">
         <h3 th:if="*{id} == 0">Add</h3>
         <h3 th:if="*{id} > 0">Edit</h3>
@@ -63,7 +63,7 @@
 
     <div class="row">
         <button type="submit">Send</button>
-        <a href="comment_list.html" th:href="@{/comments_book/(book=*{book})}"><button type="button">Cancel</button></a>
+        <a href="comment_list.html" th:href="@{/comments/book=(*{book})}"><button type="button">Cancel</button></a>
     </div>
 </form>
 

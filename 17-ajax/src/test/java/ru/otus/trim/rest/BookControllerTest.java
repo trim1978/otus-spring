@@ -42,7 +42,7 @@ class BookControllerTest {
     @Test
     void shouldReturnCorrectForList () throws Exception {
         when (library.getBooks(Mockito.any())).thenReturn(new PageImpl<>(List.of(BOOK)));
-        mockMvc.perform(get("/api/books"))
+        mockMvc.perform(get("/api/books/"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(library, times(1)).getBooks (any());
@@ -53,7 +53,7 @@ class BookControllerTest {
         when(library.getBookById(Mockito.anyLong())).thenReturn(BOOK);
         when(library.getAuthors()).thenReturn(List.of(AUTHOR));
         when(library.getGenres()).thenReturn(List.of(GENRE));
-        this.mockMvc.perform(get("/api/book").param("id", "1"))
+        this.mockMvc.perform(get("/api/books/1"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(library, times(1)).getBookById(anyLong());
@@ -62,8 +62,7 @@ class BookControllerTest {
     @Test
     public void shouldDoCorrectForRemove() throws Exception {
         when (library.getBookById(1)).thenReturn(BOOK);
-        this.mockMvc.perform(delete("/api/book_remove").param("id", "1"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(delete("/api/books/1"))
                 .andExpect(status().isOk());
         verify(library, times(1)).removeBookById(anyLong());
     }
@@ -71,7 +70,7 @@ class BookControllerTest {
     @Test
     public void shouldReturnCorrectForAdd() throws Exception {
         when (library.getBookById(0)).thenReturn(new Book());
-        this.mockMvc.perform(get("/api/book").param("id", "0"))
+        this.mockMvc.perform(get("/api/books/0"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(library, times(0)).getBookById(anyLong ());
@@ -80,7 +79,7 @@ class BookControllerTest {
     @Test
     void shouldReturnErrorNotFound() {
         when(library.getBookById(3L)).thenReturn(null);//Throw(NotFoundException.class);
-        assertThatThrownBy(() -> this.mockMvc.perform(get("/api/book").param("id", "3")))
+        assertThatThrownBy(() -> this.mockMvc.perform(get("/api/books/3")))
                 .hasCause(new NotFoundException());
         verify(library, times(1)).getBookById(anyLong ());
     }
@@ -88,7 +87,7 @@ class BookControllerTest {
     @Test
     void shouldReturnCorrectForSave() throws Exception {
         when(library.updateBook(any())).thenReturn(BOOK);
-        this.mockMvc.perform(post("/api/book")
+        this.mockMvc.perform(post("/api/books/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper ().writeValueAsString(BookDto.toDto(BOOK))))
                 .andExpect(status().isOk()

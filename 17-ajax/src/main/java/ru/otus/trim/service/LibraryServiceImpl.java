@@ -81,6 +81,16 @@ public class LibraryServiceImpl implements LibraryService {
         return authors.getById(id);
     }
 
+    @Override
+    public Author setAuthor(Author author) {
+        if (author.getId() > 0){
+            Author a = authors.getById(author.getId());
+            a.setName(author.getName());
+            author = a;
+        }
+        return authors.save(author);
+    }
+
     @Transactional
     @Override
     public Genre getGenre(String name) {
@@ -120,13 +130,17 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     @Override
     public Comment changeComment(long commentID, String text) {
-        //comments.updateTextById(commentID, text);
         Comment comment = comments.findById(commentID).orElse(null);
-        if (comment != null){
+        if (comment != null) {
             comment.setText(text);
             comments.saveAndFlush(comment);
         }
         return comment;
+    }
+
+    @Override
+    public Comment getComment(long commentID) {
+        return comments.findById(commentID).orElse(null);
     }
 
     @Transactional

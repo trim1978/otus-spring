@@ -20,6 +20,7 @@ public interface LibraryService {
 
     Author getAuthor (String name);
     Author getAuthor (int id);
+    Author setAuthor (Author author);
     List<Author> getAuthors ();
 
     Genre getGenre(String name);
@@ -28,6 +29,7 @@ public interface LibraryService {
 
     Comment addComment (long bookID, String text);
     Comment changeComment (long commentID, String text);
+    Comment getComment (long commentID);
     void removeComment (long commentID);
     List<Comment> getComments(long bookId);
 }

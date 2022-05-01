@@ -50,16 +50,14 @@
     </tbody>
 </table>
 <span>|</span>
-<a th:href="@{/comment_add/(book=*{book})}" href="comment_edit.html">add comment</a><span>|</span>
-<a th:href="@{/book/(id=0)}" href="book_edit.html">add book</a><span>|</span>
+<a th:href="@{/comments/add/(*{book})}" href="comment_edit.html">add comment</a><span>|</span>
 <a th:href="@{/books/}" href="book_list.html">books</a><span>|</span>
-<a th:href="@{/author/(id=0)}" href="author_edit.html">add author</a><span>|</span>
 <a th:href="@{/authors/}" href="author_list.html">authors</a><span>|</span>
 <a th:href="@{/genres/}" href="genre_list.html">genres</a><span>|</span>
 <script>
     $(function () {
         var id = document.getElementById('book-title').dataset.current;
-        $.get('/api/comments_book?book='+id).done(function (comments) {
+        $.get('/api/comments/book='+id).done(function (comments) {
             comments.forEach(function (comment) {
                 $('tbody').append(`
                     <tr id='c_${comment.id}'>
@@ -67,7 +65,7 @@
                         <td>${comment.datetime}</td>
                         <td>${comment.text}</td>
                         <td>
-                            <a href='/comment_edit/?id=${comment.id}'>edit</a>
+                            <a href='/comments/${comment.id}'>edit</a>
                             <span>|</span>
                             <a href="javascript:delete_comment(${comment.id});">del</a>
                         </td>
@@ -81,8 +79,8 @@
         if (window.confirm("Do you really want to remove comment " + id + " ?")) {
             $.ajax({
                     type: "DELETE",
-                    url: "/api/comment_remove/",
-                    data: "id="+id,
+                    url: "/api/comments/"+id,
+                    data: "",
                     success: function(data)
                     {
                         $("#c_"+id).replaceWith("");

@@ -57,13 +57,11 @@
     </tbody>
 </table>
 <span>|</span>
-<a th:href="@{/book/(id=0)}" href="book_edit.html">add book</a>
+<a th:href="@{/books/0}" href="book_edit.html">add book</a>
 <span>|</span>
 <a th:href="@{/books/}" href="book_list.html">books</a>
 <span>|</span>
-<a href="javascript:generate (100);">generate books</a>
-<span>|</span>
-<a th:href="@{/author/(id=0)}" href="author_edit.html">add author</a>
+<a th:href="@{/authors/0}" href="author_edit.html">add author</a>
 <span>|</span>
 <a th:href="@{/authors/}" href="author_list.html">authors</a>
 <span>|</span>
@@ -82,7 +80,7 @@
     }
     var request_books = function (page){
         var step = parseInt (document.getElementById('book-step').dataset.step);
-        $.get('/api/books?page='+page+'&step=10').done(function (books) {
+        $.get('/api/books/?page='+page+'&step=10').done(function (books) {
             document.getElementById('book-current').dataset.current = page;
             var max = parseInt (document.getElementById('book-page').dataset.total);
             max = Math.floor(max / step) + (max % step > 0 ? 1 : 0) - 1;
@@ -99,12 +97,12 @@
                         <td>${book.author.name}</td>
                         <td>${book.genre.name}</td>
                         <td>
-                            <a href="/book/?id=${book.id}">edit</a>
+                            <a href="/books/${book.id}">edit</a>
                             <span>|</span>
                             <a href="javascript:delete_book(${book.id}, '${book.title}');">del</a>
                         </td>
                         <td>
-                            <a href="/comments_book/?book=${book.id}">view</a>
+                            <a href="/comments/book=${book.id}">view</a>
                         </td>
                     </tr>
                 `)
@@ -113,33 +111,13 @@
 
     };
 
-    var generate = function (count)
-    {
-            $.ajax({
-                    type: "PATCH",
-                    url: "/api/books_generate/?count="+count,
-                    success: function(data)
-                    {
-                        alert ("Generated " + count + " books");
-                        var max = parseInt (document.getElementById("book-page").dataset.total);
-                        max += count;
-                        document.getElementById("book-page").dataset.total = max;
-                        request_books (0);
-                    },
-                    error: function(da, textStatus, ta){
-                        alert("Error with generate books");
-                    }
-            });
-    }
-
-
     var delete_book = function (id, title)
     {
         if (window.confirm("Do you really want to remove book '" + title + "' ?")) {
             $.ajax({
                     type: "DELETE",
-                    url: "/api/book_remove/",
-                    data: "id="+id,
+                    url: "/api/books/"+id,
+                    data: "",
                     success: function(data)
                     {
                         $("#c_"+id).replaceWith("");

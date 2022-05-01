@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.trim.model.Author;
-import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.rest.exceptions.NotFoundException;
+import ru.otus.trim.service.LibraryService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,24 +15,25 @@ import java.util.stream.Collectors;
 @RestController
 public class AuthorController {
 
-    private final AuthorRepository repository;
+    private final LibraryService library;
 
-    @GetMapping(value = "/api/authors")
+    @GetMapping(value = "/api/authors/")
     public List<AuthorDto> getAllAuthors() {
-        return repository.findAll().stream()
+        return library.getAuthors().stream()
                 .map(AuthorDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/api/author")
+    @GetMapping(value = "/api/authors/{id}")
     public AuthorDto getAuthorByIdInRequest(@RequestParam("id") int id) {
-        Author author = repository.findById(id).orElseThrow(NotFoundException::new);
+        Author author = library.getAuthor(id);
+        if (author == null) throw new NotFoundException();
         return AuthorDto.toDto(author);
     }
 
-    @PostMapping("/api/author")
+    @PostMapping("/api/authors/")
     public void saveAuthor(@ModelAttribute("author") AuthorDto author) {
-        repository.save(author.toDomainObject());
+        library.setAuthor(author.toDomainObject());
     }
 
     @ExceptionHandler(NotFoundException.class)

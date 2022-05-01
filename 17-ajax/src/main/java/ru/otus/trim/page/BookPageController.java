@@ -15,7 +15,7 @@ import ru.otus.trim.rest.exceptions.NotFoundException;
 public class BookPageController {
     private final BookController books;
 
-    @GetMapping("/books")
+    @GetMapping("/books/")
     public String getBooksByPage(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "step", defaultValue = "10") int pageCapacity, Model model) {
         model.addAttribute("step", pageCapacity);
         model.addAttribute("page", page);
@@ -23,20 +23,20 @@ public class BookPageController {
         return "book_list";
     }
 
-    @GetMapping("/book")
-    public String getBook(@RequestParam(name = "id", defaultValue = "0") long id, Model model) {
+    @GetMapping("/books/{id}")
+    public String getBook(@PathVariable long id, Model model) {
         model.addAttribute("book", books.getBook(id));
         return "book_edit";
     }
 
-    @PostMapping("/book")
+    @PostMapping("/books/")
     public String saveBook(@ModelAttribute("book") BookDto book,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "book_edit";
         }
         books.saveBook(book);
-        return "redirect:/books";
+        return "redirect:/books/";
     }
 
     @ExceptionHandler(NotFoundException.class)

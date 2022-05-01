@@ -31,7 +31,7 @@
 <body>
 
 <!-- book edition -->
-<form id="edit-form" name="book" action="book_edit.html" th:action="@{/book/(id=${book.id})}" th:method="post" th:object="${book}">
+<form id="edit-form" name="book" action="book_edit.html" th:action="@{/books/}" th:method="post" th:object="${book}">
     <h3 th:if="*{id} > 0">Edit Book:</h3>
     <h3 th:if="*{id} == 0">Add Book:</h3>
 
@@ -65,12 +65,12 @@
 
     <div class="row">
         <button type="submit">Save</button>
-        <a href="book_list.html" th:href="@{/books}"><button type="button">Cancel</button></a>
+        <a href="book_list.html" th:href="@{/books/}"><button type="button">Cancel</button></a>
     </div>
 </form>
 <script>
     $(function () {
-        $.get('/api/authors').done(function (authors) {
+        $.get('/api/authors/').done(function (authors) {
             var current = document.getElementById('book-author-input');
             authors.forEach(function (author) {
                 var selected = current.dataset.current === `${author.id}`;
@@ -80,7 +80,7 @@
         })
     });
     $(function () {
-        $.get('/api/genres').done(function (genres) {
+        $.get('/api/genres/').done(function (genres) {
             var current = document.getElementById('book-genre-input');
             genres.forEach(function (genre) {
                 var selected = current.dataset.current === `${genre.id}`;
