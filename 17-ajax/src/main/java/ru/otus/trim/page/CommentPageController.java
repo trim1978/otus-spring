@@ -41,8 +41,8 @@ public class CommentPageController {
         return "comment_edit";
     }
 
-    @GetMapping("/comments/add/{book}")
-    public String getCommentByBook(@PathVariable long bookId, Model model) {
+    @GetMapping("/comments/add/")
+    public String getCommentByBook(@RequestParam("book") long bookId, Model model) {
         Book book = library.getBookById(bookId);
 
         model.addAttribute("book_title", book.getTitle());

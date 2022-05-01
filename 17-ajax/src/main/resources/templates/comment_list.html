@@ -49,11 +49,17 @@
     <tbody>
     </tbody>
 </table>
+
 <span>|</span>
-<a th:href="@{/comments/add/(*{book})}" href="comment_edit.html">add comment</a><span>|</span>
-<a th:href="@{/books/}" href="book_list.html">books</a><span>|</span>
-<a th:href="@{/authors/}" href="author_list.html">authors</a><span>|</span>
-<a th:href="@{/genres/}" href="genre_list.html">genres</a><span>|</span>
+<a th:href="@{/comments/add/(book=*{book})}" href="comment_edit.html">add comment</a>
+<span>|</span>
+<a th:href="@{/books/}" href="book_list.html">books</a>
+<span>|</span>
+<a th:href="@{/authors/}" href="author_list.html">authors</a>
+<span>|</span>
+<a th:href="@{/genres/}" href="genre_list.html">genres</a>
+<span>|</span>
+
 <script>
     $(function () {
         var id = document.getElementById('book-title').dataset.current;
