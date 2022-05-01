@@ -32,7 +32,7 @@ public class BookController {
 
     @GetMapping("/api/books/{id}")
     public BookDto getBook(@PathVariable long id) {
-        return id > 0 ? BookDto.toDto(Optional.ofNullable(library.getBookById(id)).orElseThrow(NotFoundException::new)) : new BookDto(0, "", new AuthorDto(0, ""), new GenreDto(0, ""));
+        return BookDto.toDto(Optional.ofNullable(library.getBookById(id)).orElseThrow(NotFoundException::new));
     }
 
     @GetMapping("/api/books/?count")

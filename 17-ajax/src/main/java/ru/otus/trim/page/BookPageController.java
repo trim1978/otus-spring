@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.trim.rest.BookController;
+import ru.otus.trim.rest.dto.AuthorDto;
 import ru.otus.trim.rest.dto.BookDto;
+import ru.otus.trim.rest.dto.GenreDto;
 import ru.otus.trim.rest.exceptions.NotFoundException;
 
 @AllArgsConstructor
@@ -25,7 +27,7 @@ public class BookPageController {
 
     @GetMapping("/books/{id}")
     public String getBook(@PathVariable long id, Model model) {
-        model.addAttribute("book", books.getBook(id));
+        model.addAttribute("book", id > 0 ? books.getBook(id) : new BookDto(0, "", new AuthorDto(0, ""), new GenreDto(0, "")));
         return "book_edit";
     }
 

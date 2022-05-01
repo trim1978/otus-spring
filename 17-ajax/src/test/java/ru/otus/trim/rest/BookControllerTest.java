@@ -68,15 +68,6 @@ class BookControllerTest {
     }
 
     @Test
-    public void shouldReturnCorrectForAdd() throws Exception {
-        when (library.getBookById(0)).thenReturn(new Book());
-        this.mockMvc.perform(get("/api/books/0"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-        verify(library, times(0)).getBookById(anyLong ());
-    }
-
-    @Test
     void shouldReturnErrorNotFound() {
         when(library.getBookById(3L)).thenReturn(null);//Throw(NotFoundException.class);
         assertThatThrownBy(() -> this.mockMvc.perform(get("/api/books/3")))
