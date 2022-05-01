@@ -3,6 +3,8 @@ package ru.otus.trim.repository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;

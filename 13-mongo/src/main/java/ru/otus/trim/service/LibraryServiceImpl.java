@@ -161,13 +161,8 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<String> getGenres() {
-        List<Book> booksAll = books.findAll();
-        HashSet<String> genres = new HashSet<>();
-        for (Book book : booksAll) {
-            genres.addAll(book.getGenres());
-        }
-        return new ArrayList<>(genres);
+    public Set<String> getGenres() {
+        return books.findAllGenres();
     }
 
     @Transactional(readOnly = true)

@@ -9,6 +9,7 @@ import ru.otus.trim.model.Comment;
 import ru.otus.trim.service.LibraryOutService;
 import ru.otus.trim.service.LibraryService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,7 +113,7 @@ public class LibraryCommandComponent {
 
     @ShellMethod(value = "Generate books", key = {"generate","gen"})
     public String generateBooks(int count) {
-        List<String> genres = library.getGenres();
+        List<String> genres = new ArrayList<>(library.getGenres());
         if (genres.size() == 0){
             genres.add("drama");
         }
