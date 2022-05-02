@@ -27,7 +27,9 @@ public class BookRepositoryTest {
             List.of("drama"), List.of());
 
     @Autowired
-    private BookRepository repository;
+    private BookRepository books;
+    @Autowired
+    private AuthorRepository authors;
 
     @BeforeAll
     public static void initDb(@Autowired MongoTemplate db) {
@@ -43,21 +45,31 @@ public class BookRepositoryTest {
     @Test
     @DisplayName("должен найти все книги с заданным жанром")
     public void shouldFindBooksByGenre() {
-        List<Book> actual = repository.findByGenres("drama");
+        List<Book> actual = books.findByGenres("drama");
         assertThat(actual).hasSize(1);
     }
 
     @Test
     @DisplayName("должен вернуть пустой список книг по не существующему жанру")
     public void shouldReturnEmptyBooksByGenre() {
-        List<Book> actual = repository.findByGenres("DOESNT_EXIST_GENRE");
+        List<Book> actual = books.findByGenres("DOESNT_EXIST_GENRE");
         assertThat(actual).isEmpty();
     }
 
     @Test
-    @DisplayName("должен вернуть список книг по заданному автору ")
+    @DisplayName("должен вернуть список книг по заданному автору")
     public void shouldReturnBooksByAuthor() {
-        List<Book> actual = repository.findByAuthor(author);
+        List<Book> actual = books.findByAuthor(author);
         assertThat(actual).isEqualTo(Collections.singletonList(book));
+    }
+
+    @Test
+    @DisplayName("должен поменять данные книги")
+    public void shouldUpdateBooks() {
+        books.updateBook("1", "aaa", authors.save(new Author("New Author")), List.of("humor"));
+        Book actual = books.findById("1").orElse(null);
+        assertThat(actual.getTitle()).isEqualTo("aaa");
+        assertThat(actual.getAuthor().getName()).isEqualTo("New Author");
+        assertThat(actual.getGenres()).isEqualTo(List.of("humor"));
     }
 }

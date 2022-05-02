@@ -81,6 +81,6 @@ class LibraryServiceTest {
         given(books.findById("1")).willReturn(Optional.of(new Book()));
         library.changeBook("1","1","1",List.of("1"));
         verify(authors, times(1)).findByName(any());
-        verify(books, times(1)).save(any());
+        verify(books, times(1)).updateBook(any(),any(),any(),any());
     }
 }

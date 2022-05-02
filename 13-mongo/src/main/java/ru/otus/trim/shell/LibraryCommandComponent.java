@@ -51,7 +51,8 @@ public class LibraryCommandComponent {
 
     @ShellMethod(value = "Change book", key = {"change_book", "cb"})
     public String changeBook(String bookId, String title, String author, String genre) {
-        return out.getBookString(library.changeBook(bookId, title, author, List.of(genre)));
+        library.changeBook(bookId, title, author, List.of(genre));
+        return out.getBookString(library.getBookById(bookId));
     }
 
     @ShellMethod(value = "Get all authors", key = {"get_authors", "gaa"})

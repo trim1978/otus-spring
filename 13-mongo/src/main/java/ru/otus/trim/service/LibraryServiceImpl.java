@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.trim.model.Author;
+import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
 import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.repository.BookRepository;
-import ru.otus.trim.model.Author;
-import ru.otus.trim.model.Book;
 
 import java.util.*;
 
@@ -20,15 +20,16 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Transactional
     @Override
-    public Book changeBook(String bookId, String title, String author, List<String> genres) {
-        Book book = getBookById(bookId);
-        if (book != null) {
-            book.setTitle(title);
-            book.setAuthor(getAuthor(author));
-            book.setGenres(genres);
-            return books.save(book);
-        }
-        return null;
+    public void changeBook(String bookId, String title, String author, List<String> genres) {
+        books.updateBook(bookId, title, getAuthor(author), genres);
+//        Book book = getBookById(bookId);
+//        if (book != null) {
+//            book.setTitle(title);
+//            book.setAuthor(getAuthor(author));
+//            book.setGenres(genres);
+//            return books.save(book);
+//        }
+//        return null;
     }
 
     @Transactional
