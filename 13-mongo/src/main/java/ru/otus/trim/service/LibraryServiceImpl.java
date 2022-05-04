@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.trim.model.Author;
 import ru.otus.trim.model.Book;
+import ru.otus.trim.model.BookBrief;
 import ru.otus.trim.model.Comment;
 import ru.otus.trim.repository.AuthorRepository;
 import ru.otus.trim.repository.BookRepository;
+import ru.otus.trim.repository.CommentRepository;
 
 import java.util.*;
 
@@ -17,25 +19,19 @@ import java.util.*;
 public class LibraryServiceImpl implements LibraryService {
     public final BookRepository books;
     public final AuthorRepository authors;
+    public final CommentRepository comments;
 
     @Transactional
     @Override
     public void changeBook(String bookId, String title, String author, List<String> genres) {
         books.updateBook(bookId, title, getAuthor(author), genres);
-//        Book book = getBookById(bookId);
-//        if (book != null) {
-//            book.setTitle(title);
-//            book.setAuthor(getAuthor(author));
-//            book.setGenres(genres);
-//            return books.save(book);
-//        }
-//        return null;
     }
 
     @Transactional
     @Override
     public void removeBookById(String bookId) {
            books.deleteById(bookId);
+           comments.deleteByBook(new BookBrief(bookId));
     }
 
     @Transactional(readOnly = true)
@@ -93,65 +89,31 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Comment addComment(String bookId, String text) {
         Book book = books.findById(bookId).orElseThrow();
-        Comment comment = new Comment(new ObjectId().toString(), new Date (), book, text);
-        List<Comment> comments = book.getComment();
-        if (comments == null){
-            book.setComment(List.of(comment));
-        }
-        else {
-            comments.add (comment);
-        }
-        books.save(book);
-        return comment;
+        Comment comment = new Comment(new ObjectId().toString(), new Date (), new BookBrief(bookId), text);
+        return comments.save(comment);
     }
 
     @Transactional()
     @Override
-    public Comment changeComment(String bookId, String commentId, String text) {
-        Book book = books.findById(bookId).orElseThrow();
-        List<Comment> comments = book.getComment();
-        ListIterator<Comment> it = comments.listIterator();
-        for (Comment comment : comments){
-            if (comment.getId().equalsIgnoreCase(commentId)){
-                comment.setText(text);
-                books.save(book);
-                comment.setBook(book);
-                return comment;
-            }
-        }
-        return null;
+    public void changeComment(String commentId, String text) {
+        comments.updateComment(commentId, text);
     }
 
     @Transactional()
     @Override
-    public void removeComment(String bookId, String commentId) {
-        Book book = books.findById(bookId).orElseThrow();
-        List<Comment> comments = book.getComment();
-        ListIterator<Comment> it = comments.listIterator();
-        while (it.hasNext()){
-            if (it.next().getId().equalsIgnoreCase(commentId)){
-                it.remove();
-                books.save(book);
-                break;
-            }
-        }
+    public void removeComment(String commentId) {
+        comments.deleteById(commentId);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Comment> getComments(String bookId) {
-        Book book = books.findById(bookId).orElseThrow();
-        List<Comment> comments = book.getComment();
-        if (comments == null){
-            return List.of();
-        }
-        else {
-            for (Comment comment : comments){
-                comment.setBook(book);
-            }
-            return comments;
-        }
-        //return books.getBookCommentById(bookId);
+        return comments.findByBook(new BookBrief(bookId));
+    }
+
+    @Override
+    public Comment getComment(String commentId) {
+        return comments.findById(commentId).orElse(null);
     }
 
     @Transactional(readOnly = true)

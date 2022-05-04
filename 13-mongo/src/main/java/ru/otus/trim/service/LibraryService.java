@@ -24,7 +24,8 @@ public interface LibraryService {
     List<Book> getBooksByAuthor (String author);
 
     Comment addComment (String bookId, String text);
-    Comment changeComment (String bookId, String commentId, String text);
-    void removeComment (String bookId, String commentId);
+    void changeComment (String commentId, String text);
+    void removeComment (String commentId);
     List<Comment> getComments(String bookId);
+    Comment getComment(String commentId);
 }

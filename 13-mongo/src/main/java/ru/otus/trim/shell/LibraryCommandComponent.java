@@ -27,6 +27,7 @@ public class LibraryCommandComponent {
 
     @ShellMethod(value = "Remove book", key = {"remove_book","rb","db"})
     public String removeBook(String bookId) {
+        library.removeBookById(bookId);
         return String.format("Removed book %s", bookId);
     }
 
@@ -101,14 +102,15 @@ public class LibraryCommandComponent {
     }
 
     @ShellMethod(value = "Remove comment", key = {"remove_comment","rc"})
-    public String removeComment(String bookId, String commentId) {
-        library.removeComment(bookId, commentId);
+    public String removeComment(String commentId) {
+        library.removeComment(commentId);
         return String.format("Removed comment id = %s", commentId);
     }
 
     @ShellMethod(value = "Change comment", key = {"change_comment","cc"})
-    public String changeComment(String bookId, String commentId, String text) {
-        Comment comment = library.changeComment(bookId, commentId, text);
+    public String changeComment(String commentId, String text) {
+        library.changeComment(commentId, text);
+        Comment comment = library.getComment(commentId);
         return out.getCommentString(comment);
     }
 
