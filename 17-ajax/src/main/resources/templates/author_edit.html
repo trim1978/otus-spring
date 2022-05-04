@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:if="*{id} != 0">Edit author</title>
+    <title th:if="*{id} == 0">Create author</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- author edition -->
+<form id="edit-form" action="author_edit.html" th:action="@{/authors/}" th:method="post" th:object="${author}">
+    <h3>Author Info:</h3>
+
+    <div class="row" th:if="*{id} > 0">
+        <label for="id-input">ID:</label>
+        <input id="id-input" name="id" type="text" readonly="readonly" th:value="*{id}" value="1"/>
+    </div>
+
+    <div class="row" th:if="*{id} == 0">
+        <input id="id-def" name="id" type="hidden" th:value="0" value="0"/>
+    </div>
+
+    <div class="row">
+        <label for="author-name-input">Name:</label>
+        <input id="author-name-input" name="name" type="text" th:value="*{name}" value="John Doe"/>
+        <div class="errors" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Wrong author name error</div>
+    </div>
+
+    <div class="row">
+        <button id="send" type="submit">Save</button>
+        <a href="author_list.html" th:href="@{/authors/}"><button type="button">Cancel</button></a>
+    </div>
+</form>
+<div id="result_form"></div>
+</body>
+</html>

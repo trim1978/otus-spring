@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:if="*{id} != null">Edit comment</title>
+    <title th:if="*{id} == null">Create comment</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- comment edition -->
+<form id="edit-form" action="comment_edit.html" th:action="@{/comments/}" th:method="post" th:object="${comment}">
+    <div class="row">
+        <h3 th:if="*{id} == 0">Add</h3>
+        <h3 th:if="*{id} > 0">Edit</h3>
+        <h>comment for book "[[${book_title}]]"</h>
+    </div>
+
+    <div class="row" th:if="*{id} > 0">
+        <input id="id-input" name="id" type="hidden" th:value="*{id}" value="1"/>
+    </div>
+
+    <div class="row" th:if="*{id} == 0">
+        <input id="id-def" name="id" type="hidden" th:value="0" value="0"/>
+    </div>
+
+    <div class="row">
+        <input id="book-input" name="book" type="hidden" th:value="*{book}" value="1"/>
+    </div>
+
+    <div class="row" th:if="*{id} > 0">
+        <label for="time-input">Datetime:</label>
+        <input id="time-input" type="text" readonly="readonly" th:value="*{datetime}" value="1"/>
+    </div>
+
+
+    <div class="row">
+        <label for="comment-text-input">Text:</label>
+        <textarea id="comment-text-input" name="text" rows="4" cols="50" th:field="*{text}">Text</textarea>
+    </div>
+
+    <div class="row">
+        <button type="submit">Send</button>
+        <a href="comment_list.html" th:href="@{/comments/book=(*{book})}"><button type="button">Cancel</button></a>
+    </div>
+</form>
+
+</body>
+</html>

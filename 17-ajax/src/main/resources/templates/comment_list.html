@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of comments</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .comments {
+            border: 1px solid steelblue;
+            width: 300px;
+            border-collapse: collapse;
+        }
+
+        .comments tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .comments td:last-child, td:first-child {
+            width: 50px;
+        }
+
+    </style>
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h3>Comments:</h3><br>
+<h>Title: "[[*{title}]]"</h>
+<br>
+<h>Author: [[*{author}]]</h>
+<br>
+<h>Genre: [[*{genre}]]</h>
+<br>
+
+<table th:attr="data-current=*{book}" id="book-title" class="comments">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Time</th>
+        <th>Text</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<span>|</span>
+<a th:href="@{/comments/add/(book=*{book})}" href="comment_edit.html">add comment</a>
+<span>|</span>
+<a th:href="@{/books/}" href="book_list.html">books</a>
+<span>|</span>
+<a th:href="@{/authors/}" href="author_list.html">authors</a>
+<span>|</span>
+<a th:href="@{/genres/}" href="genre_list.html">genres</a>
+<span>|</span>
+
+<script>
+    $(function () {
+        var id = document.getElementById('book-title').dataset.current;
+        $.get('/api/comments/book='+id).done(function (comments) {
+            comments.forEach(function (comment) {
+                $('tbody').append(`
+                    <tr id='c_${comment.id}'>
+                        <td>${comment.id}</td>
+                        <td>${comment.datetime}</td>
+                        <td>${comment.text}</td>
+                        <td>
+                            <a href='/comments/${comment.id}'>edit</a>
+                            <span>|</span>
+                            <a href="javascript:delete_comment(${comment.id});">del</a>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+    var delete_comment = function (id)
+    {
+        if (window.confirm("Do you really want to remove comment " + id + " ?")) {
+            $.ajax({
+                    type: "DELETE",
+                    url: "/api/comments/"+id,
+                    data: "",
+                    success: function(data)
+                    {
+                        $("#c_"+id).replaceWith("");
+                    },
+                    error: function(){
+                        alert("Error with delete comment " + id );
+                    }
+            });
+        }
+    }
+
+</script>
+
+</body>
+</html>
