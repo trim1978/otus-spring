@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@Document
+@Document("comments")
 public class Comment {
     @Transient
     public static final String SEQUENCE_NAME="comment_sequence";
@@ -22,13 +22,13 @@ public class Comment {
     private String id;
     private Date datetime;
 
-    @Transient
-    private Book book;
+    //@Transient
+    private BookBrief book;
     private String text;
 
     public Comment(Book book, String text) {
         this.datetime = new Date ();
-        this.book = book;
+        this.book = new BookBrief (book.getId());
         this.text = text;
     }
 }

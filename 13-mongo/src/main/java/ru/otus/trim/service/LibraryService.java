@@ -5,9 +5,10 @@ import ru.otus.trim.model.Book;
 import ru.otus.trim.model.Comment;
 
 import java.util.List;
+import java.util.Set;
 
 public interface LibraryService {
-    Book changeBook(String bookId, String title, String author, List<String> genres);
+    void changeBook(String bookId, String title, String author, List<String> genres);
     void removeBookById (String bookId);
     Book getBookById (String bookId);
     List<Book> getBooks ();
@@ -17,13 +18,14 @@ public interface LibraryService {
     Author removeAuthor (String name);
     List<Author> getAuthors ();
 
-    List<String> getGenres ();
+    Set<String> getGenres ();
 
     List<Book> getBooksByGenre (String genre);
     List<Book> getBooksByAuthor (String author);
 
     Comment addComment (String bookId, String text);
-    Comment changeComment (String bookId, String commentId, String text);
-    void removeComment (String bookId, String commentId);
+    void changeComment (String commentId, String text);
+    void removeComment (String commentId);
     List<Comment> getComments(String bookId);
+    Comment getComment(String commentId);
 }
